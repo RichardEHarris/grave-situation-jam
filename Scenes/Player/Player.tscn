@@ -1,0 +1,67 @@
+[gd_scene format=3 uid="uid://x25d2r17ely6"]
+
+[ext_resource type="Script" uid="uid://fabacdbxsg06" path="res://Scenes/Player/player.gd" id="1_s0eop"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_l3ax4"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_s0eop"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_ft8w5"]
+top_radius = 0.0
+height = 1.0
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_s0eop"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
+[node name="Player" type="CharacterBody3D" unique_id=1808271539]
+script = ExtResource("1_s0eop")
+
+[node name="BodyCollider" type="CollisionShape3D" parent="." unique_id=1944948290]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_l3ax4")
+
+[node name="BodyMesh" type="MeshInstance3D" parent="." unique_id=1082142508]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_s0eop")
+
+[node name="Head" type="Node3D" parent="." unique_id=1431038654]
+unique_name_in_owner = true
+
+[node name="Face" type="MeshInstance3D" parent="Head" unique_id=1518075707]
+transform = Transform3D(1, 0, 0, 0, -0.05247529, 0.99862224, 0, -0.99862224, -0.05247529, 0, 1.7413256, -0.5926962)
+mesh = SubResource("CylinderMesh_ft8w5")
+
+[node name="Camera3D" type="Camera3D" parent="Head" unique_id=1461379677]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 16, 0)
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1200002864]
+replication_config = SubResource("SceneReplicationConfig_s0eop")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1094204221]
+
+[node name="Menu" type="Control" parent="CanvasLayer" unique_id=1905617736]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/Menu" unique_id=2106433961]
+layout_mode = 1
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Menu/PanelContainer" unique_id=2090521029]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="ButtonLeave" type="Button" parent="CanvasLayer/Menu/PanelContainer/MarginContainer" unique_id=2086442987]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Leave"
