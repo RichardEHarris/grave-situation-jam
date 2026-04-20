@@ -30,6 +30,10 @@ func add_player(peer_id: int):
 	
 	var new_player = PLAYER.instantiate()
 	new_player.name = str(peer_id)
+	var rand_x = randf_range(-5, 5)
+	var rand_z = randf_range(-5, 5)
+	
+	new_player.position = Vector3(rand_x, 1, rand_z)
 	get_tree().current_scene.add_child(new_player, true)
 
 func remove_player(peer_id):

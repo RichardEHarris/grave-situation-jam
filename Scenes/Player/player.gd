@@ -35,6 +35,8 @@ func _process(delta: float) -> void:
 			menu.show()
 		else:
 			menu.hide()
+	if Input.is_action_just_pressed("shoot"):
+		shoot()
 		
 
 #func _unhandled_input(event: InputEvent) -> void:
@@ -75,4 +77,10 @@ func set_colour():
 	var material = hat.get_surface_override_material(0).duplicate()
 	seed(int(name))
 	material.albedo_color = Color(randf(), randf(), randf(), 255)
-	hat.set_surface_override_material(0, material)
+	hat.set_surface_override_material(0, material) 
+
+func shoot():
+	var facing_dir = -head.transform.basis.z
+	var force = 100
+	var pos = global_position
+	Global.shoot_ball.rpc_id(1, pos, facing_dir, force)
