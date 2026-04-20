@@ -16,7 +16,6 @@ func _ready() -> void:
 		add_world()
 		hide()
 
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
@@ -25,7 +24,6 @@ func on_join():
 	Network.join_server()
 	add_world()
 	hide()
-	
 
 func add_world():
 	var new_world = LEVEL_1.instantiate()

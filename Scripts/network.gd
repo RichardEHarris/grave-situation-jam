@@ -3,16 +3,14 @@ extends Node
 const PLAYER = preload("uid://x25d2r17ely6")
 
 var enet_peer := ENetMultiplayerPeer.new()
-
-
 var PORT = 9999
 var IP_ADDRESS = "localhost"
+
 
 func start_server():
 	enet_peer.create_server(PORT)
 	multiplayer.multiplayer_peer = enet_peer
 	multiplayer.peer_connected.connect(add_player)
-	
 
 func join_server():
 	enet_peer.create_client(IP_ADDRESS,PORT)
@@ -33,7 +31,7 @@ func add_player(peer_id: int):
 	var new_player = PLAYER.instantiate()
 	new_player.name = str(peer_id)
 	get_tree().current_scene.add_child(new_player, true)
-	
+
 func remove_player(peer_id):
 	if peer_id == 1:
 		leave_server()
@@ -48,7 +46,7 @@ func leave_server():
 	multiplayer.multiplayer_peer = null
 	clean_up_signals()
 	get_tree().reload_current_scene()
-	
+
 func clean_up_signals():
 	multiplayer.peer_connected.disconnect(add_player)
 	multiplayer.peer_disconnected.disconnect(remove_player)

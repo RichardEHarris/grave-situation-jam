@@ -6,7 +6,7 @@ const JUMP_VELOCITY = 4.5
 
 @onready var camera_3d: Camera3D = %Camera3D
 @onready var head: Node3D = %Head
-
+@onready var hat: MeshInstance3D = $"Head/Wizard Hat/Cone"
 @onready var menu: Control = %Menu
 @onready var button_leave: Button = %ButtonLeave
 
@@ -25,6 +25,7 @@ func _ready():
 	
 	camera_3d.current = true
 	button_leave.pressed.connect(func(): Network.leave_server())
+	set_colour()
 	
 
 func _process(delta: float) -> void:
@@ -61,8 +62,17 @@ func _physics_process(delta: float) -> void:
 	if direction:
 		velocity.x = direction.x * SPEED
 		velocity.z = direction.z * SPEED
+		
+		head.look_at(direction + transform.origin)
+		
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)
 
 	move_and_slide()
+	
+func set_colour():
+	var material = hat.get_surface_override_material(0).duplicate()
+	seed(int(name))
+	material.albedo_color = Color(randf(), randf(), randf(), 255)
+	hat.set_surface_override_material(0, material)
