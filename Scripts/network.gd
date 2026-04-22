@@ -11,6 +11,7 @@ func start_server():
 	enet_peer.create_server(PORT)
 	multiplayer.multiplayer_peer = enet_peer
 	multiplayer.peer_connected.connect(add_player)
+	multiplayer.peer_disconnected.connect(remove_player)
 
 func join_server():
 	enet_peer.create_client(IP_ADDRESS,PORT)
@@ -27,24 +28,24 @@ func on_connected_to_server():
 func add_player(peer_id: int):
 	if peer_id == 1:
 		return
-	
+	if not is_multiplayer_authority():
+		return
+	print(str(multiplayer.get_unique_id()) + ": player created: %s " % peer_id)
 	var new_player = PLAYER.instantiate()
 	new_player.name = str(peer_id)
-	var rand_x = randf_range(-5, 5)
-	var rand_z = randf_range(-5, 5)
-	
-	new_player.position = Vector3(rand_x, 1, rand_z)
 	new_player.player_colour = Color(randf(), randf(), randf(), 255)
-	get_tree().current_scene.add_child(new_player, true)
+	new_player.player_material = new_player.PLAYER_MATERIAL
+	Global.spawn_container.add_child.call_deferred(new_player, true)
 
 func remove_player(peer_id):
 	if peer_id == 1:
 		leave_server()
-	
 	var players: Array[Node] = get_tree().get_nodes_in_group("Players")
 	var player_to_remove = players.find_custom(func(item): return item.name == str(peer_id))
 	if player_to_remove != -1:
 		players[player_to_remove].queue_free()
+		#print(str(multiplayer.get_unique_id()) + ": removed player: " + str(peer_id))
+	
 
 func leave_server():
 	multiplayer.multiplayer_peer.close()

@@ -13,8 +13,13 @@ properties/0/replication_mode = 1
 properties/1/path = NodePath(".:rotation")
 properties/1/spawn = true
 properties/1/replication_mode = 1
+properties/2/path = NodePath(".:label_text")
+properties/2/spawn = true
+properties/2/replication_mode = 1
 
 [node name="Enemy" type="CharacterBody3D" unique_id=869953371]
+collision_layer = 2
+collision_mask = 3
 script = ExtResource("1_8q37v")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2050169801]
@@ -25,3 +30,8 @@ mesh = SubResource("SphereMesh_bt1oo")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1275483360]
 replication_config = SubResource("SceneReplicationConfig_8q37v")
+
+[node name="Label3D" type="Label3D" parent="." unique_id=167938552]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.79840195, 0)
+billboard = 1
+font_size = 170

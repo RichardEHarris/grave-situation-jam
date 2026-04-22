@@ -51,10 +51,10 @@ transform = Transform3D(1, 0, 0, 0, 0.62185884, 0.78312945, 0, -0.78312945, 0.62
 shadow_enabled = true
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=279232793]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 21.193901, 0)
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 16, 0)
 
 [node name="SpawnContainer" type="Node3D" parent="." unique_id=187880534]
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=500640292]
-_spawnable_scenes = PackedStringArray("uid://4hnuvjijwq2b", "uid://on77vwkf1mvg")
+_spawnable_scenes = PackedStringArray("uid://4hnuvjijwq2b", "uid://on77vwkf1mvg", "uid://x25d2r17ely6")
 spawn_path = NodePath("../SpawnContainer")

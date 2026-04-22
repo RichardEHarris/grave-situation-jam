@@ -2,17 +2,19 @@ extends Node
 
 var world : Node3D
 var spawn_container : Node3D
-var player_colour : Color = Color(randf(), randf(), randf(), 255)
+var player_colour : Color
 
 var spawn_enemies : bool = false
 var spawn_cooldown = 1.0
 var current_timer = 0
+@export var enemy_count = 0
+var max_enemies = 10
 
 const BALL = preload("uid://4hnuvjijwq2b")
 const ENEMY = preload("uid://on77vwkf1mvg")
 
 func _process(delta: float) -> void:
-	if not is_multiplayer_authority():
+	if multiplayer.multiplayer_peer and not is_multiplayer_authority():
 		return	
 	current_timer -= delta
 	if get_players().size() > 0:
@@ -22,10 +24,13 @@ func _process(delta: float) -> void:
 		current_timer = spawn_cooldown
 	
 
-@rpc("any_peer")
 func spawn_enemy():
+	if enemy_count >= max_enemies:
+		return
 	var new_enemy := ENEMY.instantiate()
-	new_enemy.position = Vector3(randf_range(5, 10), 0.1, randf_range(5, 10))
+	#new_enemy.position = Vector3(randf_range(5, 10), 0.1, randf_range(5, 10))
+	enemy_count += 1
+	new_enemy.label_text = str(enemy_count)
 	spawn_container.add_child(new_enemy, true)
 
 @rpc("any_peer")

@@ -1,8 +1,10 @@
 extends CharacterBody3D
 
-@export_color_no_alpha var player_colour : Color = Color()
+@export var player_colour : Color
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
+const PLAYER_MATERIAL = preload("uid://nxsn4asxq8gc")
+var player_material : StandardMaterial3D 
 
 @onready var camera_3d: Camera3D = %Camera3D
 @onready var head: Node3D = %Head
@@ -11,20 +13,23 @@ const JUMP_VELOCITY = 4.5
 @onready var button_leave: Button = %ButtonLeave
 
 
+
+
 func _enter_tree() -> void:
 	set_multiplayer_authority(int(name))
 
 func _ready():
 	menu.hide()
 	add_to_group("Players")
+	hat.set_surface_override_material(0, PLAYER_MATERIAL)
+	set_colour()
 	#player_colour = Global.player_colour
 	#Global.set_player_colour.rpc(name)
-	set_colour()
 	if not is_multiplayer_authority():
 		set_process(false)
 		set_physics_process(false)
 		return
-	
+	position = position + Vector3(randf_range(0, 5), 1, randf_range(0, 5))
 	camera_3d.current = true
 	button_leave.pressed.connect(func(): Network.leave_server())
 	
@@ -38,9 +43,11 @@ func _process(_delta: float) -> void:
 			menu.show()
 		else:
 			menu.hide()
+		#self.player_colour = Color(randf(), randf(), randf(), 255)
 	if Input.is_action_just_pressed("shoot"):
 		shoot()
-		#self.player_colour = Color(randf(), randf(), randf(), 255)
+		set_colour()
+		
 		
 		
 
@@ -80,9 +87,9 @@ func _physics_process(delta: float) -> void:
 
 
 func set_colour():
-	var material = hat.get_surface_override_material(0).duplicate()
+	print(str(multiplayer.get_unique_id()) + ": colour: "+str(player_colour))
+	var material = hat.get_surface_override_material(0)
 	material.albedo_color = player_colour
-	hat.set_surface_override_material(0, material) 
 
 func shoot():
 	var facing_dir = -head.transform.basis.z
