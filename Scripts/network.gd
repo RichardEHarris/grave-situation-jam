@@ -34,6 +34,7 @@ func add_player(peer_id: int):
 	var rand_z = randf_range(-5, 5)
 	
 	new_player.position = Vector3(rand_x, 1, rand_z)
+	new_player.player_colour = Color(randf(), randf(), randf(), 255)
 	get_tree().current_scene.add_child(new_player, true)
 
 func remove_player(peer_id):

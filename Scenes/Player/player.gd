@@ -1,6 +1,6 @@
 extends CharacterBody3D
 
-@export var sensitivity: float = 0.002
+@export_color_no_alpha var player_colour : Color = Color()
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
 
@@ -17,7 +17,9 @@ func _enter_tree() -> void:
 func _ready():
 	menu.hide()
 	add_to_group("Players")
-	
+	#player_colour = Global.player_colour
+	#Global.set_player_colour.rpc(name)
+	set_colour()
 	if not is_multiplayer_authority():
 		set_process(false)
 		set_physics_process(false)
@@ -25,10 +27,11 @@ func _ready():
 	
 	camera_3d.current = true
 	button_leave.pressed.connect(func(): Network.leave_server())
-	set_colour()
 	
 
-func _process(delta: float) -> void:
+
+func _process(_delta: float) -> void:
+	
 	if Input.is_action_just_pressed('menu'):
 		if menu.visible == false:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
@@ -37,6 +40,8 @@ func _process(delta: float) -> void:
 			menu.hide()
 	if Input.is_action_just_pressed("shoot"):
 		shoot()
+		#self.player_colour = Color(randf(), randf(), randf(), 255)
+		
 		
 
 #func _unhandled_input(event: InputEvent) -> void:
@@ -72,11 +77,11 @@ func _physics_process(delta: float) -> void:
 		velocity.z = move_toward(velocity.z, 0, SPEED)
 
 	move_and_slide()
-	
+
+
 func set_colour():
 	var material = hat.get_surface_override_material(0).duplicate()
-	seed(int(name))
-	material.albedo_color = Color(randf(), randf(), randf(), 255)
+	material.albedo_color = player_colour
 	hat.set_surface_override_material(0, material) 
 
 func shoot():

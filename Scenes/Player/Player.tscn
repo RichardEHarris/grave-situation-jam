@@ -24,9 +24,13 @@ properties/1/replication_mode = 1
 properties/2/path = NodePath("Head:rotation")
 properties/2/spawn = true
 properties/2/replication_mode = 1
+properties/3/path = NodePath(".:player_colour")
+properties/3/spawn = true
+properties/3/replication_mode = 1
 
 [node name="Player" type="CharacterBody3D" unique_id=1808271539]
 script = ExtResource("1_s0eop")
+player_colour = Color(0.24998516, 0.49465692, 0.47666425, 1)
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1461379677]
 unique_name_in_owner = true
@@ -47,7 +51,7 @@ rotation_order = 0
 [node name="Wizard Hat" parent="Head" unique_id=643566593 instance=ExtResource("2_ft8w5")]
 transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 1.8611994, 0)
 
-[node name="Cone" parent="Head/Wizard Hat" index="0" unique_id=316822071]
+[node name="Cone" parent="Head/Wizard Hat" index="0" unique_id=1590017749]
 surface_material_override/0 = SubResource("StandardMaterial3D_ft8w5")
 
 [node name="Face" type="MeshInstance3D" parent="Head" unique_id=1518075707]
