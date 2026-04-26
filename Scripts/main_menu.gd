@@ -2,6 +2,7 @@ extends CanvasLayer
 
 @onready var button_join: Button = %ButtonJoin
 @onready var button_quit: Button = %ButtonQuit
+@onready var game_scene: SubViewport = %GameScene
 
 const LEVEL_1 = preload("uid://lgcdgo0015kc") #World1
 const PLAYER = preload("uid://x25d2r17ely6")
@@ -23,4 +24,4 @@ func on_join():
 
 func add_world():
 	var new_world = LEVEL_1.instantiate()
-	get_tree().current_scene.add_child.call_deferred(new_world)
+	game_scene.add_child.call_deferred(new_world)

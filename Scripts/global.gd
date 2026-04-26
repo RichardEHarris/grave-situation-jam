@@ -5,10 +5,15 @@ var spawn_container : Node3D
 var player_colour : Color
 
 var spawn_enemies : bool = false
-var spawn_cooldown = 1.0
+var spawn_cooldown = 0.5
 var current_timer = 0
 @export var enemy_count = 0
-var max_enemies = 10
+var max_enemies = 20
+
+const PLAYER_TAG = "Players"
+const ENEMY_TAG = "Enemy"
+const PROJECTILE_TAG = "Projectile"
+
 
 const BALL = preload("uid://4hnuvjijwq2b")
 const ENEMY = preload("uid://on77vwkf1mvg")
@@ -36,7 +41,8 @@ func spawn_enemy():
 @rpc("any_peer")
 func shoot_ball(pos, dir, force):
 	var new_ball : RigidBody3D = BALL.instantiate()
-	new_ball.position = pos + Vector3(0, 1, 0) + (dir * 2)
+	new_ball.position = pos + Vector3(0, 0.5, 0) + dir
+	#new_ball.add_to_group(PROJECTILE_TAG)
 	spawn_container.add_child(new_ball, true)
 	new_ball.apply_central_impulse(dir * force)
 	

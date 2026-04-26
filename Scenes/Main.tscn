@@ -1,7 +1,50 @@
 [gd_scene format=3 uid="uid://dyqrqpmj25nfc"]
 
 [ext_resource type="PackedScene" uid="uid://5al0o8asrmrm" path="res://Scenes/UI/MainMenu.tscn" id="1_r150o"]
+[ext_resource type="Shader" uid="uid://dt5ajmg3lg67n" path="res://Scenes/outline.gdshader" id="2_idj7w"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kln2b"]
+render_priority = 0
+shader = ExtResource("2_idj7w")
+shader_parameter/depth_threshold = 0.05
+shader_parameter/reverse_depth_threshold = 0.25
+shader_parameter/normal_threshold = 0.6
+shader_parameter/darken_amount = 0.3
+shader_parameter/lighten_amount = 1.5
+shader_parameter/normal_edge_bias = Vector3(1, 1, 1)
+shader_parameter/light_direction = Vector3(-0.96, -0.18, 0.2)
+
+[sub_resource type="QuadMesh" id="QuadMesh_idj7w"]
+material = SubResource("ShaderMaterial_kln2b")
+flip_faces = true
+size = Vector2(2, 2)
 
 [node name="Main" type="Node" unique_id=1743270164]
 
 [node name="MainMenu" parent="." unique_id=916966675 instance=ExtResource("1_r150o")]
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=1968037759]
+texture_filter = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+stretch_shrink = 4
+
+[node name="GameScene" type="SubViewport" parent="SubViewportContainer" unique_id=1257795679]
+unique_name_in_owner = true
+handle_input_locally = false
+size = Vector2i(288, 162)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="SubViewportContainer/GameScene" unique_id=1856081099]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 16, 0)
+projection = 1
+size = 25.0
+
+[node name="PostProcessing" type="MeshInstance3D" parent="SubViewportContainer/GameScene/Camera3D" unique_id=8570333]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 6.993822e-07, -16)
+extra_cull_margin = 16384.0
+mesh = SubResource("QuadMesh_idj7w")

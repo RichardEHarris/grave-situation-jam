@@ -1,22 +1,25 @@
 [gd_scene format=3 uid="uid://lgcdgo0015kc"]
 
-[ext_resource type="Texture2D" uid="uid://bq8quoqmpcgff" path="res://Assets/craftpix_Undead_Top_Down/Background.png" id="1_sya2q"]
-[ext_resource type="Script" uid="uid://ce518imsy8m2q" path="res://Scenes/Enviroment/world_1.gd" id="1_um7ql"]
+[ext_resource type="Script" uid="uid://ce518imsy8m2q" path="res://Scripts/world_1.gd" id="1_um7ql"]
 [ext_resource type="Texture2D" uid="uid://dixxe2wf7b1y3" path="res://Assets/craftpix_Undead_Top_Down/Texture11-invert.png" id="2_kgjwl"]
 [ext_resource type="Texture2D" uid="uid://qih4gy42thjv" path="res://Assets/craftpix_Undead_Top_Down/Texture11.png" id="2_uuwhu"]
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_6ojss"]
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_kgjwl"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_um7ql"]
+noise = SubResource("FastNoiseLite_kgjwl")
+normalize = false
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sya2q"]
 resource_local_to_scene = true
-albedo_texture = ExtResource("1_sya2q")
-albedo_texture_force_srgb = true
+albedo_color = Color(0.12722059, 0.35343558, 0.118407, 1)
+albedo_texture = SubResource("NoiseTexture2D_um7ql")
 normal_texture = ExtResource("2_uuwhu")
 heightmap_texture = ExtResource("2_uuwhu")
 detail_mask = ExtResource("2_kgjwl")
 detail_blend_mode = 2
-uv1_scale = Vector3(0.5, 0.5, 0.5)
-uv1_triplanar = true
 texture_filter = 2
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_uuwhu"]
@@ -49,9 +52,6 @@ environment = SubResource("Environment_uuwhu")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1311210268]
 transform = Transform3D(1, 0, 0, 0, 0.62185884, 0.78312945, 0, -0.78312945, 0.62185884, 0, 3.4527621, 0)
 shadow_enabled = true
-
-[node name="Camera3D" type="Camera3D" parent="." unique_id=279232793]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 16, 0)
 
 [node name="SpawnContainer" type="Node3D" parent="." unique_id=187880534]
 

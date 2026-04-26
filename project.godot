@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Grave Situation Jam"
 run/main_scene="uid://dyqrqpmj25nfc"
-config/features=PackedStringArray("4.6", "GL Compatibility")
+config/features=PackedStringArray("4.6", "C#", "GL Compatibility")
 boot_splash/show_image=false
 config/icon="res://icon.svg"
 
@@ -73,6 +73,11 @@ shoot={
 ]
 }
 
+[layer_names]
+
+3d_physics/layer_1="Player"
+3d_physics/layer_2="Enemy"
+
 [physics]
 
 3d/physics_engine="Jolt Physics"
@@ -81,5 +86,3 @@ shoot={
 
 textures/canvas_textures/default_texture_filter=3
 rendering_device/driver.windows="d3d12"
-renderer/rendering_method="gl_compatibility"
-renderer/rendering_method.mobile="gl_compatibility"

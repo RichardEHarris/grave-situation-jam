@@ -1,8 +1,10 @@
 [gd_scene format=3 uid="uid://on77vwkf1mvg"]
 
-[ext_resource type="Script" uid="uid://dnpc6v42mjbs7" path="res://Scenes/Entities/enemy.gd" id="1_8q37v"]
+[ext_resource type="Script" uid="uid://dnpc6v42mjbs7" path="res://Scripts/enemy.gd" id="1_8q37v"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bt1oo"]
+radius = 0.4
+height = 2.942
 
 [sub_resource type="SphereMesh" id="SphereMesh_bt1oo"]
 
@@ -17,21 +19,32 @@ properties/2/path = NodePath(".:label_text")
 properties/2/spawn = true
 properties/2/replication_mode = 1
 
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_8q37v"]
+radius = 0.6
+
 [node name="Enemy" type="CharacterBody3D" unique_id=869953371]
-collision_layer = 2
+collision_layer = 3
 collision_mask = 3
 script = ExtResource("1_8q37v")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2050169801]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_bt1oo")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=69333412]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 mesh = SubResource("SphereMesh_bt1oo")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1275483360]
 replication_config = SubResource("SceneReplicationConfig_8q37v")
 
 [node name="Label3D" type="Label3D" parent="." unique_id=167938552]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.79840195, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 billboard = 1
 font_size = 170
+
+[node name="EnemyCollision" type="Area3D" parent="." unique_id=501263947]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EnemyCollision" unique_id=964622481]
+shape = SubResource("CapsuleShape3D_8q37v")

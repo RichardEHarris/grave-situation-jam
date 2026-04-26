@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://4hnuvjijwq2b"]
 
+[ext_resource type="Script" uid="uid://dajbk363yclag" path="res://Scripts/ball.gd" id="1_0owi4"]
 [ext_resource type="Texture2D" uid="uid://c0lr2mqmrxte7" path="res://Assets/craftpix_Undead_Top_Down/PNG/Objects_separately/Rock_shadow1_1.png" id="1_mqcfq"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_0owi4"]
@@ -20,10 +21,14 @@ properties/1/path = NodePath(".:position")
 properties/1/spawn = true
 properties/1/replication_mode = 1
 
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_mqcfq"]
+radius = 0.6
+
 [node name="Ball" type="RigidBody3D" unique_id=1471886756]
-collision_layer = 2
+collision_layer = 0
 collision_mask = 3
 mass = 3.0
+script = ExtResource("1_0owi4")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1418405505]
 shape = SubResource("SphereShape3D_0owi4")
@@ -33,3 +38,17 @@ mesh = SubResource("SphereMesh_nq6lh")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=2093201797]
 replication_config = SubResource("SceneReplicationConfig_mqcfq")
+
+[node name="ProjectileCollision" type="Area3D" parent="." unique_id=1903841544]
+collision_layer = 0
+collision_mask = 3
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ProjectileCollision" unique_id=568058057]
+shape = SubResource("CapsuleShape3D_mqcfq")
+
+[node name="Timer" type="Timer" parent="." unique_id=1395253873]
+wait_time = 3.0
+one_shot = true
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

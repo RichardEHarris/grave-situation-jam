@@ -1,6 +1,7 @@
 extends CharacterBody3D
 
 @export var player_colour : Color
+@export var angle_offset = -15.0
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
 const PLAYER_MATERIAL = preload("uid://nxsn4asxq8gc")
@@ -11,6 +12,7 @@ var player_material : StandardMaterial3D
 @onready var hat: MeshInstance3D = $"Head/Wizard Hat/Cone"
 @onready var menu: Control = %Menu
 @onready var button_leave: Button = %ButtonLeave
+@onready var player_collision: Area3D = $PlayerCollision
 
 
 
@@ -20,7 +22,7 @@ func _enter_tree() -> void:
 
 func _ready():
 	menu.hide()
-	add_to_group("Players")
+	add_to_group(Global.PLAYER_TAG)
 	hat.set_surface_override_material(0, PLAYER_MATERIAL)
 	set_colour()
 	#player_colour = Global.player_colour
@@ -32,11 +34,10 @@ func _ready():
 	position = position + Vector3(randf_range(0, 5), 1, randf_range(0, 5))
 	camera_3d.current = true
 	button_leave.pressed.connect(func(): Network.leave_server())
+	player_collision.body_entered.connect(on_collision)
 	
-
 
 func _process(_delta: float) -> void:
-	
 	if Input.is_action_just_pressed('menu'):
 		if menu.visible == false:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
@@ -46,43 +47,37 @@ func _process(_delta: float) -> void:
 		#self.player_colour = Color(randf(), randf(), randf(), 255)
 	if Input.is_action_just_pressed("shoot"):
 		shoot()
-		set_colour()
-		
-		
+		#set_colour()
 		
 
-#func _unhandled_input(event: InputEvent) -> void:
-#	if not is_multiplayer_authority():
-#		return
-#	if event is InputEventMouseMotion:
-#		head.rotate_y(-event.relative.x * sensitivity)
-#		camera_3d.rotate_x(-event.relative.y * sensitivity)
-#		camera_3d.rotation.x = clamp(camera_3d.rotation.x, deg_to_rad(-90), deg_to_rad(90))
+func _unhandled_input(event: InputEvent) -> void:
+	if not is_multiplayer_authority():
+		return
+	if event is InputEventMouseMotion:
+		var screen_size = get_viewport().get_visible_rect().size
+		var half_screen = screen_size/2
+		var mouse_pos = event.position
+		var relative_location = Vector3(mouse_pos.x - half_screen.x, 0, mouse_pos.y - half_screen.y)
+		head.look_at(relative_location + transform.origin)
+		head.rotate(Vector3(1,0,0), deg_to_rad(angle_offset))
 	
 
 func _physics_process(delta: float) -> void:
-	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 	
-	# Handle jump.
-	#if Input.is_action_just_pressed("ui_accept") and is_on_floor():
-	#	velocity.y = JUMP_VELOCITY
-
-	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
 	var input_dir := Input.get_vector("left", "right", "up", "down")
 	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if direction:
 		velocity.x = direction.x * SPEED
 		velocity.z = direction.z * SPEED
 		
-		head.look_at(direction + transform.origin)
-		
+		#head.look_at(direction + transform.origin)
+		#head.rotate(Vector3(1,0,0), deg_to_rad(angle_offset))
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)
-
+		
 	move_and_slide()
 
 
@@ -96,3 +91,8 @@ func shoot():
 	var force = 100
 	var pos = global_position
 	Global.shoot_ball.rpc_id(1, pos, facing_dir, force)
+
+func on_collision(body : Node3D):
+	if body.is_in_group(Global.ENEMY_TAG):
+		#TODO add player health handling here
+		print(name+": Ouch")
