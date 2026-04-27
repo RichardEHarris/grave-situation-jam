@@ -1,17 +1,18 @@
 extends RigidBody3D
 class_name Projectile
 
-@export var speed : float = 5.0
+@export var speed : float = 100
 @export var base_damage : float = 1.0
 @export var size : float = 1.0
 @export var lifespan : float = 3.0
 @export var hits : int = 1
 @export var amount : int = 1
 @export var piercing : bool = true
+@export var gravity : bool = true
+
 
 enum movement_type{
-	straight,
-	gravity
+	straight
 }
 
 @onready var projectile_collision: Area3D = $ProjectileCollision
@@ -28,9 +29,12 @@ func _ready() -> void:
 	projectile_collision.body_entered.connect(on_collision)
 	timer.wait_time = lifespan
 	timer.timeout.connect(timeout)
-	
+	if not gravity:
+		gravity_scale = 0
 	set_collision_mask_value(2, not piercing) #set enemy collision mask.
 		
+	
+#func _physics_process(delta: float) -> void:
 	
 
 func on_collision(body : Node3D):
