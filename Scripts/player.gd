@@ -90,7 +90,7 @@ func shoot():
 	var facing_dir = -head.transform.basis.z
 	var force = 100
 	var pos = global_position
-	Global.shoot_ball.rpc_id(1, pos, facing_dir, force)
+	Global.shoot_projectile.rpc_id(1, pos, facing_dir, force)
 
 func on_collision(body : Node3D):
 	if body.is_in_group(Global.ENEMY_TAG):

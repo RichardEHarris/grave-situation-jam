@@ -56,5 +56,5 @@ shadow_enabled = true
 [node name="SpawnContainer" type="Node3D" parent="." unique_id=187880534]
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=500640292]
-_spawnable_scenes = PackedStringArray("uid://4hnuvjijwq2b", "uid://on77vwkf1mvg", "uid://x25d2r17ely6")
+_spawnable_scenes = PackedStringArray("uid://4hnuvjijwq2b", "uid://on77vwkf1mvg", "uid://x25d2r17ely6", "uid://dy0vkht00yvfv")
 spawn_path = NodePath("../SpawnContainer")

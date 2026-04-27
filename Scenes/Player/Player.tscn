@@ -32,7 +32,8 @@ properties/3/spawn = true
 properties/3/replication_mode = 1
 
 [node name="Player" type="CharacterBody3D" unique_id=1808271539]
-collision_mask = 3
+collision_layer = 8
+collision_mask = 11
 script = ExtResource("1_s0eop")
 player_colour = Color(0.24998516, 0.49465692, 0.47666425, 1)
 
@@ -64,7 +65,7 @@ mesh = SubResource("CapsuleMesh_s0eop")
 [node name="Wizard Hat" parent="Head" unique_id=643566593 instance=ExtResource("2_ft8w5")]
 transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 1.8611994, 0)
 
-[node name="Cone" parent="Head/Wizard Hat" index="0" unique_id=316822071]
+[node name="Cone" parent="Head/Wizard Hat" index="0" unique_id=1590017749]
 surface_material_override/0 = SubResource("StandardMaterial3D_ft8w5")
 
 [node name="Face" type="MeshInstance3D" parent="Head" unique_id=1518075707]

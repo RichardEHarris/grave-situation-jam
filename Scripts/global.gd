@@ -17,6 +17,7 @@ const PROJECTILE_TAG = "Projectile"
 
 const BALL = preload("uid://4hnuvjijwq2b")
 const ENEMY = preload("uid://on77vwkf1mvg")
+const PROJECTILE = preload("uid://dy0vkht00yvfv")
 
 func _process(delta: float) -> void:
 	if multiplayer.multiplayer_peer and not is_multiplayer_authority():
@@ -45,6 +46,14 @@ func shoot_ball(pos, dir, force):
 	#new_ball.add_to_group(PROJECTILE_TAG)
 	spawn_container.add_child(new_ball, true)
 	new_ball.apply_central_impulse(dir * force)
+	
+@rpc("any_peer")
+func shoot_projectile(pos, dir, force):
+	var new_proj : RigidBody3D = PROJECTILE.instantiate()
+	new_proj.position = pos + Vector3(0, 0.2, 0) + dir
+	#new_ball.add_to_group(PROJECTILE_TAG)
+	spawn_container.add_child(new_proj, true)
+	new_proj.apply_central_impulse(dir * force)
 	
 @rpc("any_peer")
 func set_player_colour(player_id: String):

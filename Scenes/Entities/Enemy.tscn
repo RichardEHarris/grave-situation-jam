@@ -23,8 +23,8 @@ properties/2/replication_mode = 1
 radius = 0.6
 
 [node name="Enemy" type="CharacterBody3D" unique_id=869953371]
-collision_layer = 3
-collision_mask = 3
+collision_layer = 2
+collision_mask = 11
 script = ExtResource("1_8q37v")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2050169801]

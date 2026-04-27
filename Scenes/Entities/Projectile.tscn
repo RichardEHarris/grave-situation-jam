@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://dy0vkht00yvfv"]
+
+[ext_resource type="Script" uid="uid://cd6lguxr6o5bw" path="res://Scripts/projectile.gd" id="1_akala"]
+[ext_resource type="Texture2D" uid="uid://c0lr2mqmrxte7" path="res://Assets/craftpix_Undead_Top_Down/PNG/Objects_separately/Rock_shadow1_1.png" id="2_c33bx"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_akala"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_awjpe"]
+albedo_texture = ExtResource("2_c33bx")
+albedo_texture_force_srgb = true
+texture_filter = 2
+
+[sub_resource type="SphereMesh" id="SphereMesh_nq6lh"]
+material = SubResource("StandardMaterial3D_awjpe")
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_mqcfq"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_mqcfq"]
+
+[node name="Projectile" type="RigidBody3D" unique_id=1471886756]
+collision_layer = 4
+mass = 3.0
+script = ExtResource("1_akala")
+hits = 2
+
+[node name="PhysicsShape" type="CollisionShape3D" parent="." unique_id=1418405505]
+shape = SubResource("CapsuleShape3D_akala")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=482060878]
+mesh = SubResource("SphereMesh_nq6lh")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=2093201797]
+replication_config = SubResource("SceneReplicationConfig_mqcfq")
+
+[node name="ProjectileCollision" type="Area3D" parent="." unique_id=1903841544]
+collision_layer = 0
+collision_mask = 3
+
+[node name="Hitbox" type="CollisionShape3D" parent="ProjectileCollision" unique_id=568058057]
+shape = SubResource("CapsuleShape3D_mqcfq")
+
+[node name="Timer" type="Timer" parent="." unique_id=1395253873]
+wait_time = 3.0
+one_shot = true
+autostart = true
