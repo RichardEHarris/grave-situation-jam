@@ -33,8 +33,6 @@ func add_player(peer_id: int):
 	print(str(multiplayer.get_unique_id()) + ": player created: %s " % peer_id)
 	var new_player = PLAYER.instantiate()
 	new_player.name = str(peer_id)
-	new_player.player_colour = Color(randf(), randf(), randf(), 255)
-	new_player.player_material = new_player.PLAYER_MATERIAL
 	Global.spawn_container.add_child.call_deferred(new_player, true)
 
 func remove_player(peer_id):

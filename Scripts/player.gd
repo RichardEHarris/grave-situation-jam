@@ -4,7 +4,6 @@ extends CharacterBody3D
 @export var angle_offset = -15.0
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
-const PLAYER_MATERIAL = preload("uid://nxsn4asxq8gc")
 var player_material : StandardMaterial3D 
 
 @onready var camera_3d: Camera3D = %Camera3D
@@ -19,11 +18,15 @@ var player_material : StandardMaterial3D
 
 func _enter_tree() -> void:
 	set_multiplayer_authority(int(name))
+	player_material = Global.PLAYER_MATERIAL.duplicate()
+	if not is_multiplayer_authority():
+		return
+	player_colour = Color(randf(), randf(), randf(), 255)
 
 func _ready():
 	menu.hide()
 	add_to_group(Global.PLAYER_TAG)
-	hat.set_surface_override_material(0, PLAYER_MATERIAL)
+	hat.set_surface_override_material(0, player_material)
 	set_colour()
 	#player_colour = Global.player_colour
 	#Global.set_player_colour.rpc(name)
@@ -31,6 +34,7 @@ func _ready():
 		set_process(false)
 		set_physics_process(false)
 		return
+		
 	position = position + Vector3(randf_range(0, 5), 1, randf_range(0, 5))
 	camera_3d.current = true
 	button_leave.pressed.connect(func(): Network.leave_server())

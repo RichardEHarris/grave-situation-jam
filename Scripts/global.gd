@@ -15,9 +15,10 @@ const ENEMY_TAG = "Enemy"
 const PROJECTILE_TAG = "Projectile"
 
 
-const BALL = preload("uid://4hnuvjijwq2b")
 const ENEMY = preload("uid://on77vwkf1mvg")
 const PROJECTILE = preload("uid://dy0vkht00yvfv")
+const PLAYER_MATERIAL = preload("uid://nxsn4asxq8gc")
+
 
 func _process(delta: float) -> void:
 	if multiplayer.multiplayer_peer and not is_multiplayer_authority():
@@ -38,14 +39,6 @@ func spawn_enemy():
 	enemy_count += 1
 	new_enemy.label_text = str(enemy_count)
 	spawn_container.add_child(new_enemy, true)
-
-@rpc("any_peer")
-func shoot_ball(pos, dir, force):
-	var new_ball : RigidBody3D = BALL.instantiate()
-	new_ball.position = pos + Vector3(0, 0.5, 0) + dir
-	#new_ball.add_to_group(PROJECTILE_TAG)
-	spawn_container.add_child(new_ball, true)
-	new_ball.apply_central_impulse(dir * force)
 	
 @rpc("any_peer")
 func shoot_projectile(pos, dir, force):

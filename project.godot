@@ -24,6 +24,10 @@ Network="*uid://dn6dsj5dagu4y"
 TileRunInstancesGlobal="*uid://b6fg6pu2bfi14"
 Global="*uid://b4hf3htnpfnwf"
 
+[display]
+
+window/stretch/mode="viewport"
+
 [dotnet]
 
 project/assembly_name="Grave Situation Jam"
@@ -75,8 +79,10 @@ shoot={
 
 [layer_names]
 
-3d_physics/layer_1="Player"
+3d_physics/layer_1="World"
 3d_physics/layer_2="Enemy"
+3d_physics/layer_3="Projectile"
+3d_physics/layer_4="Player"
 
 [physics]
 

@@ -32,7 +32,7 @@ properties/3/spawn = true
 properties/3/replication_mode = 1
 
 [node name="Player" type="CharacterBody3D" unique_id=1808271539]
-collision_layer = 8
+collision_layer = 10
 collision_mask = 11
 script = ExtResource("1_s0eop")
 player_colour = Color(0.24998516, 0.49465692, 0.47666425, 1)

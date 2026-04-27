@@ -28,8 +28,9 @@ func _ready() -> void:
 	projectile_collision.body_entered.connect(on_collision)
 	timer.wait_time = lifespan
 	timer.timeout.connect(timeout)
-	#if piercing:
-		#physics_shape.shape = get_capsule_shape(0.1)
+	
+	set_collision_mask_value(2, not piercing) #set enemy collision mask.
+		
 	
 
 func on_collision(body : Node3D):
