@@ -1,0 +1,71 @@
+[gd_scene format=3 uid="uid://bxjifqpfnc6le"]
+
+[ext_resource type="Script" uid="uid://f4oltk5vokyw" path="res://Scenes/player_ui.gd" id="1_iyl1i"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_iyl1i"]
+
+[node name="PlayerUI" type="CanvasLayer" unique_id=59860313]
+script = ExtResource("1_iyl1i")
+
+[node name="Menu" type="Control" parent="." unique_id=802149250]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="PanelContainer" type="PanelContainer" parent="Menu" unique_id=1848029560]
+layout_mode = 1
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="MarginContainer" type="MarginContainer" parent="Menu/PanelContainer" unique_id=1364948029]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="ButtonLeave" type="Button" parent="Menu/PanelContainer/MarginContainer" unique_id=1045433895]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Leave"
+
+[node name="HUD" type="Control" parent="." unique_id=590875616]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="HUD" unique_id=112090318]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -1.0
+offset_bottom = 23.0
+grow_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_iyl1i")
+
+[node name="MarginContainer" type="MarginContainer" parent="HUD/PanelContainer" unique_id=431272328]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HUD/PanelContainer/MarginContainer" unique_id=704125631]
+layout_mode = 2
+
+[node name="KillLabel" type="Label" parent="HUD/PanelContainer/MarginContainer/HBoxContainer" unique_id=454946437]
+layout_mode = 2
+text = "Kills:"
+
+[node name="KillNumber" type="Label" parent="HUD/PanelContainer/MarginContainer/HBoxContainer" unique_id=101978963]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"

@@ -25,12 +25,14 @@ properties/1/replication_mode = 1
 
 [node name="Projectile" type="RigidBody3D" unique_id=1471886756]
 collision_layer = 4
+axis_lock_linear_y = true
+axis_lock_angular_x = true
+axis_lock_angular_z = true
 mass = 3.0
 gravity_scale = 2.0
 script = ExtResource("1_akala")
 hits = 3
 piercing = false
-gravity = false
 
 [node name="PhysicsShape" type="CollisionShape3D" parent="." unique_id=1418405505]
 shape = SubResource("CapsuleShape3D_akala")
@@ -51,4 +53,3 @@ shape = SubResource("CapsuleShape3D_mqcfq")
 [node name="Timer" type="Timer" parent="." unique_id=1395253873]
 wait_time = 3.0
 one_shot = true
-autostart = true

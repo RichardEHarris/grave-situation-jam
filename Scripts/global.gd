@@ -3,12 +3,15 @@ extends Node
 var world : Node3D
 var spawn_container : Node3D
 var player_colour : Color
+var player_ui : CanvasLayer
+var player_menu: Control
 
 var spawn_enemies : bool = false
 var spawn_cooldown = 0.5
 var current_timer = 0
-@export var enemy_count = 0
-var max_enemies = 20
+@export var enemy_count : int = 0
+@export var max_enemies : int = 20
+@export var kills : int = 0
 
 const PLAYER_TAG = "Players"
 const ENEMY_TAG = "Enemy"
@@ -22,13 +25,15 @@ const PLAYER_MATERIAL = preload("uid://nxsn4asxq8gc")
 
 func _process(delta: float) -> void:
 	if multiplayer.multiplayer_peer and not is_multiplayer_authority():
-		return	
+		return
 	current_timer -= delta
 	if get_players().size() > 0:
 		spawn_enemies = true
 	if spawn_enemies and current_timer <= 0:
 		spawn_enemy()
 		current_timer = spawn_cooldown
+	player_ui.display()
+	player_ui.set_kills.rpc(kills)
 	
 
 func spawn_enemy():

@@ -23,17 +23,19 @@ func _ready() -> void:
 		return
 	#enemy_collision.body_entered.connect(on_collision)
 	
-func on_collision(body : Node3D):
+#func on_collision(body : Node3D):
 	#print(body.get_groups())
-	if body.is_in_group(Global.PROJECTILE_TAG):
-		queue_free()
+	#if body.is_in_group(Global.PROJECTILE_TAG):
+	#	queue_free()
 
 func _process(delta: float) -> void:
-	if label_text:
-		label_3d.text = label_text
+	#if label_text:
+	#	label_3d.text = label_text
+	pass
 
 func _physics_process(_delta: float) -> void:
-	
+	if is_queued_for_deletion():
+		return
 	var players = Global.get_players()
 	var closest = null
 	var closest_dist = 1000
@@ -60,3 +62,4 @@ func _physics_process(_delta: float) -> void:
 
 func _exit_tree() -> void:
 	Global.enemy_count -= 1
+	Global.kills += 1

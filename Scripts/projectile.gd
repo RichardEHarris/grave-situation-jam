@@ -29,6 +29,7 @@ func _ready() -> void:
 	projectile_collision.body_entered.connect(on_collision)
 	timer.wait_time = lifespan
 	timer.timeout.connect(timeout)
+	timer.start()
 	if not gravity:
 		gravity_scale = 0
 	set_collision_mask_value(2, not piercing) #set enemy collision mask.
@@ -38,7 +39,9 @@ func _ready() -> void:
 	
 
 func on_collision(body : Node3D):
-	if body.is_in_group(Global.ENEMY_TAG):
+	if is_queued_for_deletion():
+		return
+	if body and body.is_in_group(Global.ENEMY_TAG):
 		body.queue_free()
 		hits -= 1
 		if hits <= 0:

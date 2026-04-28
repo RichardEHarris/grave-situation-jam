@@ -9,12 +9,14 @@ var player_material : StandardMaterial3D
 @onready var camera_3d: Camera3D = %Camera3D
 @onready var head: Node3D = %Head
 @onready var hat: MeshInstance3D = $"Head/Wizard Hat/Cone"
-@onready var menu: Control = %Menu
-@onready var button_leave: Button = %ButtonLeave
+
 @onready var player_collision: Area3D = $PlayerCollision
 
-
-
+@rpc("any_peer","call_local")
+func sync():
+	if not is_multiplayer_authority():
+		return
+	set_colour.rpc(player_colour)
 
 func _enter_tree() -> void:
 	set_multiplayer_authority(int(name))
@@ -24,34 +26,34 @@ func _enter_tree() -> void:
 	player_colour = Color(randf(), randf(), randf(), 255)
 
 func _ready():
-	menu.hide()
 	add_to_group(Global.PLAYER_TAG)
 	hat.set_surface_override_material(0, player_material)
-	set_colour()
-	#player_colour = Global.player_colour
-	#Global.set_player_colour.rpc(name)
+	print(str(multiplayer.get_unique_id()) + ": " + str(get_path()))
+	sync.rpc.call_deferred()
+	
 	if not is_multiplayer_authority():
 		set_process(false)
 		set_physics_process(false)
 		return
-		
+	
 	position = position + Vector3(randf_range(0, 5), 1, randf_range(0, 5))
 	camera_3d.current = true
-	button_leave.pressed.connect(func(): Network.leave_server())
+	Global.player_ui.button_leave.pressed.connect(func(): Network.leave_server())
+	Global.player_ui.display()
 	player_collision.body_entered.connect(on_collision)
 	
 
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed('menu'):
-		if menu.visible == false:
+		if Global.player_menu.visible == false:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-			menu.show()
+			Global.player_menu.show()
 		else:
-			menu.hide()
+			Global.player_menu.hide()
 		#self.player_colour = Color(randf(), randf(), randf(), 255)
 	if Input.is_action_just_pressed("shoot"):
 		shoot()
-		#set_colour()
+		set_colour.rpc(player_colour)
 		
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -84,11 +86,11 @@ func _physics_process(delta: float) -> void:
 		
 	move_and_slide()
 
-
-func set_colour():
-	print(str(multiplayer.get_unique_id()) + ": colour: "+str(player_colour))
+@rpc("authority","call_local")
+func set_colour(colour : Color):
+	#print(str(multiplayer.get_unique_id()) + ": colour: "+str(player_colour))
 	var material = hat.get_surface_override_material(0)
-	material.albedo_color = player_colour
+	material.albedo_color = colour
 
 func shoot():
 	var facing_dir = -head.transform.basis.z

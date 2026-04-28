@@ -65,7 +65,7 @@ mesh = SubResource("CapsuleMesh_s0eop")
 [node name="Wizard Hat" parent="Head" unique_id=643566593 instance=ExtResource("2_ft8w5")]
 transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 1.8611994, 0)
 
-[node name="Cone" parent="Head/Wizard Hat" index="0" unique_id=1590017749]
+[node name="Cone" parent="Head/Wizard Hat" index="0" unique_id=316822071]
 surface_material_override/0 = SubResource("StandardMaterial3D_ft8w5")
 
 [node name="Face" type="MeshInstance3D" parent="Head" unique_id=1518075707]
@@ -76,31 +76,5 @@ mesh = SubResource("CylinderMesh_ft8w5")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1200002864]
 replication_config = SubResource("SceneReplicationConfig_s0eop")
-
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1094204221]
-
-[node name="Menu" type="Control" parent="CanvasLayer" unique_id=1905617736]
-unique_name_in_owner = true
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/Menu" unique_id=2106433961]
-layout_mode = 1
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Menu/PanelContainer" unique_id=2090521029]
-layout_mode = 2
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 20
-
-[node name="ButtonLeave" type="Button" parent="CanvasLayer/Menu/PanelContainer/MarginContainer" unique_id=2086442987]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Leave"
 
 [editable path="Head/Wizard Hat"]
