@@ -9,6 +9,8 @@ class_name Projectile
 @export var amount : int = 1
 @export var piercing : bool = true
 @export var gravity : bool = true
+@export var spread_angle : float = 10
+@export var child_projectiles : Array[Projectile] = []
 
 
 enum movement_type{
@@ -23,7 +25,7 @@ enum movement_type{
 func _ready() -> void:
 	add_to_group(Global.PROJECTILE_TAG)
 	if not is_multiplayer_authority():
-		#set_process(false)
+		set_process(false)
 		set_physics_process(false)
 		return
 	projectile_collision.body_entered.connect(on_collision)
@@ -42,10 +44,15 @@ func on_collision(body : Node3D):
 	if is_queued_for_deletion():
 		return
 	if body and body.is_in_group(Global.ENEMY_TAG):
+		#rojectile_collision.monitoring = false
+		handle_collision.call_deferred(body)
+
+func handle_collision(body : Node3D):
+	if is_instance_valid(body):
 		body.queue_free()
-		hits -= 1
-		if hits <= 0:
-			queue_free()
+	hits -= 1
+	if hits <= 0:
+		queue_free()
 
 func timeout() -> void:
 	queue_free()

@@ -3,8 +3,9 @@
 [ext_resource type="Script" uid="uid://fabacdbxsg06" path="res://Scripts/player.gd" id="1_s0eop"]
 [ext_resource type="PackedScene" uid="uid://divt440a17gdf" path="res://Assets/BananaBolt/Wizard Hat.fbx" id="2_ft8w5"]
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ft8w5"]
-radius = 0.7
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_ft8w5"]
+height = 1.0
+radius = 0.6
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_l3ax4"]
 
@@ -27,21 +28,20 @@ properties/1/replication_mode = 1
 properties/2/path = NodePath("Head:rotation")
 properties/2/spawn = true
 properties/2/replication_mode = 1
-properties/3/path = NodePath(".:player_colour")
-properties/3/spawn = true
-properties/3/replication_mode = 1
 
 [node name="Player" type="CharacterBody3D" unique_id=1808271539]
 collision_layer = 8
 collision_mask = 11
 script = ExtResource("1_s0eop")
-player_colour = Color(0.24998516, 0.49465692, 0.47666425, 1)
+player_colour = Color(0.7321832, 0.7108231, 0.9045892, 1)
 
 [node name="PlayerCollision" type="Area3D" parent="." unique_id=2102791856]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+collision_layer = 8
+collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PlayerCollision" unique_id=45818804]
-shape = SubResource("CapsuleShape3D_ft8w5")
+shape = SubResource("CylinderShape3D_ft8w5")
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1461379677]
 unique_name_in_owner = true

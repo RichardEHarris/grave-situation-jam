@@ -32,7 +32,6 @@ mass = 3.0
 gravity_scale = 2.0
 script = ExtResource("1_akala")
 hits = 3
-piercing = false
 
 [node name="PhysicsShape" type="CollisionShape3D" parent="." unique_id=1418405505]
 shape = SubResource("CapsuleShape3D_akala")

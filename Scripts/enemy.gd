@@ -4,7 +4,7 @@ const SPEED = 2.0
 var min_spawn_dist = 25.0
 var max_spawn_dist = 40.0
 
-@onready var enemy_collision: Area3D = $EnemyCollision
+#@onready var enemy_collision: Area3D = $EnemyCollision
 @onready var label_3d: Label3D = $Label3D
 @export var label_text: String
 

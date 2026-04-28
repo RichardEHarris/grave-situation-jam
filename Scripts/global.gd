@@ -53,11 +53,6 @@ func shoot_projectile(pos, dir, force):
 	spawn_container.add_child(new_proj, true)
 	new_proj.apply_central_impulse(dir * force)
 	
-@rpc("any_peer")
-func set_player_colour(player_id: String):
-	var player = find_player(player_id)
-	player.set_colour()
-	print(player.player_colour)
 
 func find_player(id) -> Node:
 	var players: = get_players()

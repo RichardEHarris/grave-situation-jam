@@ -28,7 +28,7 @@ func _enter_tree() -> void:
 func _ready():
 	add_to_group(Global.PLAYER_TAG)
 	hat.set_surface_override_material(0, player_material)
-	print(str(multiplayer.get_unique_id()) + ": " + str(get_path()))
+	#print(str(multiplayer.get_unique_id()) + ": " + str(get_path()))
 	sync.rpc.call_deferred()
 	
 	if not is_multiplayer_authority():
