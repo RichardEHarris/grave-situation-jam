@@ -1,7 +1,9 @@
 extends RigidBody3D
 class_name Projectile
 
-@export var speed : float = 100
+var direction : Vector3
+
+@export var speed : float = 25
 @export var base_damage : float = 1.0
 @export var size : float = 1.0
 @export var lifespan : float = 3.0
@@ -11,7 +13,6 @@ class_name Projectile
 @export var gravity : bool = true
 @export var spread_angle : float = 10
 @export var child_projectiles : Array[Projectile] = []
-
 
 enum movement_type{
 	straight
@@ -27,6 +28,7 @@ func _ready() -> void:
 	if not is_multiplayer_authority():
 		set_process(false)
 		set_physics_process(false)
+		
 		return
 	projectile_collision.body_entered.connect(on_collision)
 	timer.wait_time = lifespan
@@ -35,16 +37,29 @@ func _ready() -> void:
 	if not gravity:
 		gravity_scale = 0
 	set_collision_mask_value(2, not piercing) #set enemy collision mask.
-		
+	#look_at(position + direction)
 	
-#func _physics_process(delta: float) -> void:
+func _physics_process(delta: float) -> void:
+	look_forward()
+	pass
+
+func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
+	state.linear_velocity = direction * speed
 	
+	#look_follow(state, transform, position + direction * 2)
+
+func look_forward() -> void:
+	var current_rotation = transform.basis.get_rotation_quaternion().y
+	var target_rotation = direction.angle_to(Vector3.FORWARD)
+	var rotation_required = target_rotation - current_rotation
+	print("Direction: " , direction , " Current: ",rad_to_deg(current_rotation), " Target: " , rad_to_deg(target_rotation), " Required: " , rad_to_deg(rotation_required))
+	transform.basis = transform.basis.rotated(Vector3.UP, rotation_required)
+	#look_at(position + direction)
 
 func on_collision(body : Node3D):
 	if is_queued_for_deletion():
 		return
 	if body and body.is_in_group(Global.ENEMY_TAG):
-		#rojectile_collision.monitoring = false
 		handle_collision.call_deferred(body)
 
 func handle_collision(body : Node3D):
@@ -53,6 +68,7 @@ func handle_collision(body : Node3D):
 	hits -= 1
 	if hits <= 0:
 		queue_free()
+		
 
 func timeout() -> void:
 	queue_free()

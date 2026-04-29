@@ -94,7 +94,7 @@ func set_colour(colour : Color):
 
 func shoot():
 	var facing_dir = -head.transform.basis.z
-	var force = 100
+	var force = 50
 	var pos = global_position
 	Global.shoot_projectile.rpc_id(1, pos, facing_dir, force)
 
