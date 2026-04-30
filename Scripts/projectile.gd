@@ -2,6 +2,8 @@ extends RigidBody3D
 class_name Projectile
 
 var direction : Vector3
+var look_update_interval = 0.2
+var look_update_timer = 0.0
 
 @export var speed : float = 25
 @export var base_damage : float = 1.0
@@ -40,21 +42,25 @@ func _ready() -> void:
 	#look_at(position + direction)
 	
 func _physics_process(delta: float) -> void:
-	look_forward()
-	pass
+	look_update_timer -= delta
+	if look_update_timer <= 0:
+		look_forward()
+		look_update_timer = look_update_interval
+	
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	state.linear_velocity = direction * speed
 	
+	
 	#look_follow(state, transform, position + direction * 2)
 
 func look_forward() -> void:
-	var current_rotation = transform.basis.get_rotation_quaternion().y
-	var target_rotation = direction.angle_to(Vector3.FORWARD)
-	var rotation_required = target_rotation - current_rotation
-	print("Direction: " , direction , " Current: ",rad_to_deg(current_rotation), " Target: " , rad_to_deg(target_rotation), " Required: " , rad_to_deg(rotation_required))
-	transform.basis = transform.basis.rotated(Vector3.UP, rotation_required)
-	#look_at(position + direction)
+	#var current_rotation = transform.basis.get_rotation_quaternion().y
+	#var target_rotation = direction.angle_to(Vector3.FORWARD)
+	#var rotation_required = target_rotation - current_rotation
+	#print("Direction: " , direction , " Current: ",rad_to_deg(current_rotation), " Target: " , rad_to_deg(target_rotation), " Required: " , rad_to_deg(rotation_required))
+	#transform.basis = transform.basis.rotated(Vector3.UP, rotation_required)
+	look_at(position + direction)
 
 func on_collision(body : Node3D):
 	if is_queued_for_deletion():
@@ -68,7 +74,13 @@ func handle_collision(body : Node3D):
 	hits -= 1
 	if hits <= 0:
 		queue_free()
+	else:
+		set_direction(direction.bounce((body.global_position - position).normalized()))
+		look_forward()
 		
+
+func set_direction(new_dir : Vector3):
+	direction = Vector3(new_dir.x, 0, new_dir.z).normalized()
 
 func timeout() -> void:
 	queue_free()

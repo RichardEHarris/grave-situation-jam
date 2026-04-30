@@ -48,7 +48,7 @@ func spawn_enemy():
 func shoot_projectile(pos, dir, force):
 	var new_proj : RigidBody3D = PROJECTILE.instantiate()
 	new_proj.position = pos + Vector3(0, 0.5, 0) + dir
-	new_proj.direction = dir
+	new_proj.set_direction(dir)
 	#new_ball.add_to_group(PROJECTILE_TAG)
 	spawn_container.add_child(new_proj, true)
 	#new_proj.look_at(new_proj.position + dir)
