@@ -12,6 +12,8 @@ var player_material : StandardMaterial3D
 
 @onready var player_collision: Area3D = $PlayerCollision
 
+var projectile : Projectile
+
 @rpc("any_peer","call_local")
 func sync():
 	if not is_multiplayer_authority():
@@ -21,6 +23,8 @@ func sync():
 func _enter_tree() -> void:
 	set_multiplayer_authority(int(name))
 	player_material = Global.PLAYER_MATERIAL.duplicate()
+	projectile = Projectile.new()
+	projectile.proj_data["hits"] = 1
 	if not is_multiplayer_authority():
 		return
 	player_colour = Color(randf(), randf(), randf(), 255)
@@ -94,9 +98,8 @@ func set_colour(colour : Color):
 
 func shoot():
 	var facing_dir = -head.transform.basis.z
-	var force = 50
 	var pos = global_position
-	Global.shoot_projectile.rpc_id(1, pos, facing_dir, force)
+	Global.shoot_projectile.rpc_id(1, pos, facing_dir, projectile.proj_data)
 
 func on_collision(body : Node3D):
 	if body.is_in_group(Global.ENEMY_TAG):

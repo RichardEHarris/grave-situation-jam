@@ -45,8 +45,9 @@ func spawn_enemy():
 	spawn_container.add_child(new_enemy, true)
 	
 @rpc("any_peer")
-func shoot_projectile(pos, dir, force):
+func shoot_projectile(pos : Vector3, dir : Vector3, projectile_data : Dictionary):
 	var new_proj : RigidBody3D = PROJECTILE.instantiate()
+	new_proj.set_data(projectile_data)
 	new_proj.position = pos + Vector3(0, 0.5, 0) + dir
 	new_proj.set_direction(dir)
 	#new_ball.add_to_group(PROJECTILE_TAG)

@@ -4,18 +4,18 @@ class_name Projectile
 var direction : Vector3
 var look_update_interval = 0.2
 var look_update_timer = 0.0
-
-@export var speed : float = 25
-@export var base_damage : float = 1.0
-@export var size : float = 1.0
-@export var lifespan : float = 3.0
-@export var hits : int = 1
-@export var amount : int = 1
-@export var piercing : bool = true
-@export var gravity : bool = true
-@export var spread_angle : float = 10
-@export var child_projectiles : Array[Projectile] = []
-
+@export var proj_data = {
+  "speed" : 25,
+  "base_damage" : 1.0,
+  "size" : 1.0,
+  "lifespan" : 3.0,
+  "hits" : 1,
+  "amount" : 1,
+  "piercing" : true,
+  "gravity" : true,
+  "homing" : false,
+  "spread_angle" : 10
+}
 enum movement_type{
 	straight
 }
@@ -25,6 +25,10 @@ enum movement_type{
 @onready var physics_shape: CollisionShape3D = $PhysicsShape
 @onready var hitbox: CollisionShape3D = $ProjectileCollision/Hitbox
 
+func set_data(new_data : Dictionary) -> void:
+	proj_data = new_data
+	
+
 func _ready() -> void:
 	add_to_group(Global.PROJECTILE_TAG)
 	if not is_multiplayer_authority():
@@ -33,13 +37,15 @@ func _ready() -> void:
 		
 		return
 	projectile_collision.body_entered.connect(on_collision)
-	timer.wait_time = lifespan
+	timer.wait_time = proj_data["lifespan"]
 	timer.timeout.connect(timeout)
 	timer.start()
-	if not gravity:
+	if not proj_data["gravity"]:
 		gravity_scale = 0
-	set_collision_mask_value(2, not piercing) #set enemy collision mask.
-	#look_at(position + direction)
+	set_collision_mask_value(2, not proj_data["piercing"]) #set enemy collision mask.
+	if proj_data["amount"] > 1:
+		pass
+		#TODO: Spawn in Extra Projectiles
 	
 func _physics_process(delta: float) -> void:
 	look_update_timer -= delta
@@ -49,7 +55,7 @@ func _physics_process(delta: float) -> void:
 	
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
-	state.linear_velocity = direction * speed
+	state.linear_velocity = direction * proj_data["speed"]
 	
 	
 	#look_follow(state, transform, position + direction * 2)
@@ -71,10 +77,10 @@ func on_collision(body : Node3D):
 func handle_collision(body : Node3D):
 	if is_instance_valid(body):
 		body.queue_free()
-	hits -= 1
-	if hits <= 0:
+	proj_data["hits"] -= 1
+	if proj_data["hits"] <= 0:
 		queue_free()
-	else:
+	elif not proj_data["piercing"]:
 		set_direction(direction.bounce((body.global_position - position).normalized()))
 		look_forward()
 		
