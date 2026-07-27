@@ -46,14 +46,21 @@ func spawn_enemy():
 	
 @rpc("any_peer")
 func shoot_projectile(pos : Vector3, dir : Vector3, projectile_data : Dictionary):
-	var new_proj : RigidBody3D = PROJECTILE.instantiate()
-	new_proj.set_data(projectile_data)
-	new_proj.position = pos + Vector3(0, 0.5, 0) + dir
-	new_proj.set_direction(dir)
-	#new_ball.add_to_group(PROJECTILE_TAG)
-	spawn_container.add_child(new_proj, true)
-	#new_proj.look_at(new_proj.position + dir)
-	#new_proj.apply_central_impulse(dir * force)
+	for i in projectile_data["amount"]:
+		var offset = Vector3(0,0,0)
+		var spread = projectile_data["spread_angle"] * 0.01
+		if i % 2 == 1:
+			offset = dir.cross(Vector3.UP) * ceil((i+1)/2)
+		else:
+			offset = dir.cross(-Vector3.UP) * ceil(i/2)
+		var new_proj : RigidBody3D = PROJECTILE.instantiate()
+		new_proj.set_data(projectile_data)
+		new_proj.position = pos + Vector3(0, 0.5, 0) + dir + offset
+		new_proj.set_direction(dir+(offset*spread))
+		#new_ball.add_to_group(PROJECTILE_TAG)
+		spawn_container.add_child(new_proj, true)
+		#new_proj.look_at(new_proj.position + dir)
+		#new_proj.apply_central_impulse(dir * force)
 	
 
 func find_player(id) -> Node:

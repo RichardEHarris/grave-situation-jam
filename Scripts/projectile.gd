@@ -5,16 +5,18 @@ var direction : Vector3
 var look_update_interval = 0.2
 var look_update_timer = 0.0
 @export var proj_data = {
-  "speed" : 25,
-  "base_damage" : 1.0,
-  "size" : 1.0,
-  "lifespan" : 3.0,
-  "hits" : 1,
-  "amount" : 1,
-  "piercing" : true,
-  "gravity" : true,
-  "homing" : false,
-  "spread_angle" : 10
+	"speed" : 25,
+	"base_damage" : 1.0,
+	"size" : 1.0,
+	"lifespan" : 3.0,
+	"hits" : 1,
+	"amount" : 5,
+	"piercing" : false,
+	"gravity" : true,
+	"split" : 0,
+	"chain": false,
+	"homing" : false,
+	"spread_angle" : 10
 }
 enum movement_type{
 	straight
