@@ -48,24 +48,9 @@ func spawn_enemy():
 func shoot_projectile(pos : Vector3, basis : Basis, projectile_data : Dictionary):
 	var dir = -basis.z
 	for i in projectile_data["amount"]:
-		var offset = Vector3(0,0,0)
 		var spread = deg_to_rad(projectile_data["spread_angle"])
-		if i % 2 == 1:
-			#offset = dir.cross(Vector3.UP) * ceil((i+1)/2)
-			offset = Vector3(
-				sin(spread * ceil((i+1)/2)),
-				0,
-				-cos(spread * ceil((i+1)/2))
-				)
-		else:
-			#offset = dir.cross(-Vector3.UP) * ceil(i/2)
-			offset = Vector3(
-				sin(spread * -ceil(i/2)),
-				0,
-				-cos(spread * -ceil(i/2))
-				)
+		var offset = get_spread_offset_by_count(spread, i)
 		var new_proj : RigidBody3D = PROJECTILE.instantiate()
-		print(str(i) + " , offset: " + str(offset) + " , dir: " + str(dir))
 		new_proj.set_data(projectile_data)
 		new_proj.position = pos + Vector3(0, 0.5, 0) + (basis * offset)
 		new_proj.set_direction(basis * offset)
@@ -80,4 +65,13 @@ func find_player(id) -> Node:
 func get_players() -> Array[Node]:
 	var players: Array[Node] = get_tree().get_nodes_in_group("Players")
 	return players
+
+func get_angleaxis(angle) -> Vector3:
+	return Vector3(sin(angle), 0, -cos(angle))
+
+func get_spread_offset_by_count(spread, count):
+		if count % 2 == 1:
+			return get_angleaxis(spread * ceil((count+1)/2))
+		else:
+			return get_angleaxis(spread * -ceil(count/2))
 	
