@@ -24,7 +24,6 @@ func _enter_tree() -> void:
 	set_multiplayer_authority(int(name))
 	player_material = Global.PLAYER_MATERIAL.duplicate()
 	projectile = Projectile.new()
-	projectile.proj_data["hits"] = 1
 	if not is_multiplayer_authority():
 		return
 	player_colour = Color(randf(), randf(), randf(), 255)
@@ -97,9 +96,7 @@ func set_colour(colour : Color):
 	material.albedo_color = colour
 
 func shoot():
-	var facing_dir = -head.transform.basis.z
-	var pos = global_position
-	Global.shoot_projectile.rpc_id(1, pos, facing_dir, projectile.proj_data)
+	Global.shoot_projectile.rpc_id(1, global_position, head.transform.basis, projectile.proj_data)
 
 func on_collision(body : Node3D):
 	if body.is_in_group(Global.ENEMY_TAG):

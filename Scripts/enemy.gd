@@ -28,7 +28,7 @@ func _ready() -> void:
 	#if body.is_in_group(Global.PROJECTILE_TAG):
 	#	queue_free()
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	#if label_text:
 	#	label_3d.text = label_text
 	pass

@@ -9,17 +9,19 @@ var look_update_timer = 0.0
 	"base_damage" : 1.0,
 	"size" : 1.0,
 	"lifespan" : 3.0,
-	"hits" : 1,
+	"hits" : 3,
 	"amount" : 5,
+	"spread_angle" : 10,
 	"piercing" : false,
 	"gravity" : true,
 	"split" : 0,
 	"chain": false,
-	"homing" : false,
-	"spread_angle" : 10
+	"homing" : false
 }
+#TODO damage, split, chain, homing
 enum movement_type{
-	straight
+	straight,
+	wiggle
 }
 
 @onready var projectile_collision: Area3D = $ProjectileCollision

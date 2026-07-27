@@ -45,22 +45,31 @@ func spawn_enemy():
 	spawn_container.add_child(new_enemy, true)
 	
 @rpc("any_peer")
-func shoot_projectile(pos : Vector3, dir : Vector3, projectile_data : Dictionary):
+func shoot_projectile(pos : Vector3, basis : Basis, projectile_data : Dictionary):
+	var dir = -basis.z
 	for i in projectile_data["amount"]:
 		var offset = Vector3(0,0,0)
-		var spread = projectile_data["spread_angle"] * 0.01
+		var spread = deg_to_rad(projectile_data["spread_angle"])
 		if i % 2 == 1:
-			offset = dir.cross(Vector3.UP) * ceil((i+1)/2)
+			#offset = dir.cross(Vector3.UP) * ceil((i+1)/2)
+			offset = Vector3(
+				sin(spread * ceil((i+1)/2)),
+				0,
+				-cos(spread * ceil((i+1)/2))
+				)
 		else:
-			offset = dir.cross(-Vector3.UP) * ceil(i/2)
+			#offset = dir.cross(-Vector3.UP) * ceil(i/2)
+			offset = Vector3(
+				sin(spread * -ceil(i/2)),
+				0,
+				-cos(spread * -ceil(i/2))
+				)
 		var new_proj : RigidBody3D = PROJECTILE.instantiate()
+		print(str(i) + " , offset: " + str(offset) + " , dir: " + str(dir))
 		new_proj.set_data(projectile_data)
-		new_proj.position = pos + Vector3(0, 0.5, 0) + dir + offset
-		new_proj.set_direction(dir+(offset*spread))
-		#new_ball.add_to_group(PROJECTILE_TAG)
+		new_proj.position = pos + Vector3(0, 0.5, 0) + (basis * offset)
+		new_proj.set_direction(basis * offset)
 		spawn_container.add_child(new_proj, true)
-		#new_proj.look_at(new_proj.position + dir)
-		#new_proj.apply_central_impulse(dir * force)
 	
 
 func find_player(id) -> Node:
