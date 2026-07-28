@@ -46,9 +46,8 @@ func spawn_enemy():
 	
 @rpc("any_peer")
 func shoot_projectile(pos : Vector3, basis : Basis, projectile_data : Dictionary):
-	var dir = -basis.z
-	for i in projectile_data["amount"]:
-		var spread = deg_to_rad(projectile_data["spread_angle"])
+	for i in projectile_data[Projectile.amount]:
+		var spread = deg_to_rad(projectile_data[Projectile.spread_angle])
 		var offset = get_spread_offset_by_count(spread, i)
 		var new_proj : RigidBody3D = PROJECTILE.instantiate()
 		new_proj.set_data(projectile_data)
@@ -66,7 +65,8 @@ func get_players() -> Array[Node]:
 	var players: Array[Node] = get_tree().get_nodes_in_group("Players")
 	return players
 
-func get_angleaxis(angle) -> Vector3:
+## Get direction rotated by angle in radians
+func get_angleaxis(angle : float) -> Vector3:
 	return Vector3(sin(angle), 0, -cos(angle))
 
 func get_spread_offset_by_count(spread, count):
@@ -74,4 +74,16 @@ func get_spread_offset_by_count(spread, count):
 			return get_angleaxis(spread * ceil((count+1)/2))
 		else:
 			return get_angleaxis(spread * -ceil(count/2))
+
+func find_closest_in(origin_pos : Vector3, tag : String, max_distance : float) -> CharacterBody3D:
+	var enemies = get_tree().get_nodes_in_group(tag)
+	var closest_tagged: CharacterBody3D = null
+	var shortest_distance_squared: float = INF
 	
+	for tagged in enemies:
+		if tagged is CharacterBody3D:
+			var distance_squared = origin_pos.distance_squared_to(tagged.global_position)
+			if  distance_squared <= max_distance and distance_squared < shortest_distance_squared:
+				shortest_distance_squared = distance_squared
+				closest_tagged = tagged
+	return closest_tagged
