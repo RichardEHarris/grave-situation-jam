@@ -6,10 +6,10 @@ var player_ui : CanvasLayer
 var player_menu: Control
 
 var spawn_enemies : bool = false
-var spawn_cooldown = 0.5
+var spawn_cooldown = 0.2
 var current_timer = 0
 @export var enemy_count : int = 0
-@export var max_enemies : int = 20
+@export var max_enemies : int = 100
 @export var kills : int = 0
 
 const PLAYER_TAG = "Players"
@@ -75,7 +75,7 @@ func get_spread_offset_by_count(spread, count):
 		else:
 			return get_angleaxis(spread * -ceil(count/2))
 
-func find_closest_in(origin_pos : Vector3, tag : String, max_distance : float) -> CharacterBody3D:
+func find_closest_in(origin_pos : Vector3, tag : String, max_distance : float = INF, min_distance : float = 0) -> CharacterBody3D:
 	var enemies = get_tree().get_nodes_in_group(tag)
 	var closest_tagged: CharacterBody3D = null
 	var shortest_distance_squared: float = INF
@@ -83,7 +83,9 @@ func find_closest_in(origin_pos : Vector3, tag : String, max_distance : float) -
 	for tagged in enemies:
 		if tagged is CharacterBody3D:
 			var distance_squared = origin_pos.distance_squared_to(tagged.global_position)
-			if  distance_squared <= max_distance and distance_squared < shortest_distance_squared:
+			if  (distance_squared <= max_distance 
+			and distance_squared < shortest_distance_squared 
+			and distance_squared > min_distance):
 				shortest_distance_squared = distance_squared
 				closest_tagged = tagged
 	return closest_tagged

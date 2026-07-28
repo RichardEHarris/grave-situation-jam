@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://on77vwkf1mvg"]
+
+[ext_resource type="Script" uid="uid://dnpc6v42mjbs7" path="res://Scripts/enemy.gd" id="1_8q37v"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_8q37v"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_bt1oo"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_8q37v"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath(".:label_text")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+
+[node name="Enemy" type="CharacterBody3D" unique_id=869953371]
+collision_layer = 2
+collision_mask = 11
+script = ExtResource("1_8q37v")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2050169801]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CylinderShape3D_8q37v")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=69333412]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+mesh = SubResource("SphereMesh_bt1oo")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1275483360]
+replication_config = SubResource("SceneReplicationConfig_8q37v")
+
+[node name="Label3D" type="Label3D" parent="." unique_id=167938552]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+visible = false
+billboard = 1
+font_size = 170

@@ -29,8 +29,8 @@ func _ready() -> void:
 	#	queue_free()
 
 func _process(_delta: float) -> void:
-	#if label_text:
-	#	label_3d.text = label_text
+	if label_text:
+		label_3d.text = label_text
 	pass
 
 func _physics_process(_delta: float) -> void:
@@ -59,6 +59,20 @@ func _physics_process(_delta: float) -> void:
 
 	move_and_slide()
 
+func hit():
+	queue_free()
+	set_collision_layer_value(2, false)
+	add_to_group("hit_enemies")
+	var temp_timer := Timer.new()
+	add_child(temp_timer)
+	temp_timer.wait_time = 0.2
+	temp_timer.one_shot = true
+	temp_timer.start()
+	temp_timer.timeout.connect(restore_hitable)
+
+func restore_hitable():
+	set_collision_layer_value(2, true)
+	add_to_group(Global.ENEMY_TAG)
 
 func _exit_tree() -> void:
 	Global.enemy_count -= 1

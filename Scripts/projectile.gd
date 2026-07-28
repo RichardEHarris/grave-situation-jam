@@ -25,17 +25,17 @@ const homing_distance = "homing_distance"
 	base_damage : 1.0,
 	size : 1.0,
 	lifespan : 3.0,
-	hits : 3,
+	hits : 20,
 	amount : 1,
 	spread_angle : 10,
 	piercing : false,
 	gravity : true,
 	split : 0,
-	chain: false,
+	chain: true,
 	homing : 0,
 	homing_distance : 50
 }
-#TODO damage, split, chain
+#TODO damage, split
 enum movement_type{
 	straight,
 	wiggle
@@ -63,7 +63,7 @@ func _ready() -> void:
 	timer.start()
 	if not proj_data[gravity]:
 		gravity_scale = 0
-	set_collision_mask_value(2, not proj_data[piercing]) #set enemy collision mask.
+	#set_collision_mask_value(2, not proj_data[piercing]) #set enemy collision mask.
 	
 	
 func _physics_process(delta: float) -> void:
@@ -92,22 +92,26 @@ func on_collision(body : Node3D):
 		return
 	if body and body.is_in_group(Global.ENEMY_TAG):
 		handle_collision.call_deferred(body)
+		if is_instance_valid(body):
+			body.hit()
+
 
 func handle_collision(body : Node3D):
-	if is_instance_valid(body):
-		#TODO Damage handling here
-		body.queue_free()
 	proj_data[hits] -= 1
 	if proj_data[hits] <= 0:
 		queue_free()
 	else:
-		if not proj_data[piercing]:
+		if not proj_data[piercing] and not proj_data[chain]:
 			set_direction(direction.bounce((body.global_position - position).normalized()))
 			look_forward()
 		#TODO Split and Chain code goes here
 		if proj_data[split] > 0:
+			
 			pass
 		if proj_data[chain]:
+			var closest := Global.find_closest_in(global_position, Global.ENEMY_TAG, INF, 1)
+			#print("Hit: " + str(body.label_text) + ", Moving towards: " + str(closest.label_text))
+			set_direction((closest.global_position - global_position).normalized())
 			pass
 
 func set_direction(new_dir : Vector3):
