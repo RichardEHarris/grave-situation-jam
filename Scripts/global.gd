@@ -46,6 +46,7 @@ func spawn_enemy():
 	
 @rpc("any_peer")
 func shoot_projectile(pos : Vector3, basis : Basis, projectile_data : Dictionary):
+	#print("Attempting to create "+str(projectile_data[Projectile.amount])+" Projectiles")
 	for i in projectile_data[Projectile.amount]:
 		var spread = deg_to_rad(projectile_data[Projectile.spread_angle])
 		var offset = get_spread_offset_by_count(spread, i)
@@ -54,6 +55,7 @@ func shoot_projectile(pos : Vector3, basis : Basis, projectile_data : Dictionary
 		new_proj.position = pos + Vector3(0, 0.5, 0) + (basis * offset)
 		new_proj.set_direction(basis * offset)
 		spawn_container.add_child(new_proj, true)
+		
 	
 
 func find_player(id) -> Node:

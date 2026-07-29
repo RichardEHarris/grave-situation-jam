@@ -96,7 +96,7 @@ func set_colour(colour : Color):
 	material.albedo_color = colour
 
 func shoot():
-	Global.shoot_projectile.rpc_id(1, global_position, head.transform.basis, projectile.proj_data)
+	Global.shoot_projectile.rpc_id(1, global_position, head.transform.basis, projectile.proj_data.duplicate_deep())
 
 func on_collision(body : Node3D):
 	if body.is_in_group(Global.ENEMY_TAG):

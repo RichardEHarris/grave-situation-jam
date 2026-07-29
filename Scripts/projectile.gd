@@ -16,6 +16,7 @@ const spread_angle = "spread_angle"
 const piercing = "piercing"
 const gravity = "gravity"
 const split = "split"
+const split_angle = "split_angle"
 const chain = "chain"
 const homing = "homing"
 const homing_distance = "homing_distance"
@@ -30,7 +31,8 @@ const homing_distance = "homing_distance"
 	spread_angle : 10,
 	piercing : false,
 	gravity : true,
-	split : 0,
+	split : 2,
+	split_angle: 45,
 	chain: true,
 	homing : 0,
 	homing_distance : 50
@@ -104,15 +106,16 @@ func handle_collision(body : Node3D):
 		if not proj_data[piercing] and not proj_data[chain]:
 			set_direction(direction.bounce((body.global_position - position).normalized()))
 			look_forward()
-		#TODO Split and Chain code goes here
 		if proj_data[split] > 0:
-			
-			pass
+			var split_projectile_data = proj_data.duplicate_deep()
+			split_projectile_data[amount] = proj_data[split]
+			split_projectile_data[split] = 0
+			split_projectile_data[spread_angle] = proj_data[split_angle]
+			Global.shoot_projectile(global_position, transform.basis.rotated(Vector3.UP, deg_to_rad(split_projectile_data[spread_angle])), split_projectile_data)
 		if proj_data[chain]:
 			var closest := Global.find_closest_in(global_position, Global.ENEMY_TAG, INF, 1)
 			#print("Hit: " + str(body.label_text) + ", Moving towards: " + str(closest.label_text))
 			set_direction((closest.global_position - global_position).normalized())
-			pass
 
 func set_direction(new_dir : Vector3):
 	direction = Vector3(new_dir.x, 0, new_dir.z).normalized()

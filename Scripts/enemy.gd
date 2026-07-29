@@ -60,8 +60,10 @@ func _physics_process(_delta: float) -> void:
 	move_and_slide()
 
 func hit():
+	#TODO Damage and health handling here
 	queue_free()
 	set_collision_layer_value(2, false)
+	remove_from_group(Global.ENEMY_TAG)
 	add_to_group("hit_enemies")
 	var temp_timer := Timer.new()
 	add_child(temp_timer)
@@ -71,6 +73,7 @@ func hit():
 	temp_timer.timeout.connect(restore_hitable)
 
 func restore_hitable():
+	print("Enemy hittable")
 	set_collision_layer_value(2, true)
 	add_to_group(Global.ENEMY_TAG)
 
