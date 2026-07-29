@@ -31,13 +31,13 @@ const homing_distance = "homing_distance"
 	spread_angle : 10,
 	piercing : false,
 	gravity : true,
-	split : 2,
+	split : 0,
 	split_angle: 45,
-	chain: true,
+	chain: false,
 	homing : 0,
 	homing_distance : 50
 }
-#TODO damage, split
+#TODO damage
 enum movement_type{
 	straight,
 	wiggle
@@ -95,7 +95,7 @@ func on_collision(body : Node3D):
 	if body and body.is_in_group(Global.ENEMY_TAG):
 		handle_collision.call_deferred(body)
 		if is_instance_valid(body):
-			body.hit()
+			body.hit(get_damage())
 
 
 func handle_collision(body : Node3D):
@@ -144,3 +144,6 @@ func smooth_look_at(target_position: Vector3, rotation_speed : float, delta: flo
 	var target_quaternion = target_transform.basis.get_rotation_quaternion()
 	var next_quaternion = current_quaternion.slerp(target_quaternion, rotation_speed * delta)
 	set_direction(Basis(next_quaternion) * Vector3.FORWARD)
+
+func get_damage() -> float:
+	return proj_data[base_damage]

@@ -4,7 +4,11 @@ const SPEED = 2.0
 var min_spawn_dist = 25.0
 var max_spawn_dist = 40.0
 
+var health : float = 2
+
+var original_colour : Color
 #@onready var enemy_collision: Area3D = $EnemyCollision
+@onready var mesh: MeshInstance3D = $MeshInstance3D
 @onready var label_3d: Label3D = $Label3D
 @export var label_text: String
 
@@ -17,6 +21,9 @@ func _enter_tree() -> void:
 
 func _ready() -> void:
 	add_to_group(Global.ENEMY_TAG)
+	var material = mesh.get_surface_override_material(0)
+	mesh.set_surface_override_material(0, material.duplicate())
+	original_colour = material.albedo_color
 	if not is_multiplayer_authority():
 		#set_process(false)
 		set_physics_process(false)
@@ -59,23 +66,41 @@ func _physics_process(_delta: float) -> void:
 
 	move_and_slide()
 
-func hit():
-	#TODO Damage and health handling here
-	queue_free()
+func hit(damage : float):
+	take_damage(damage)
 	set_collision_layer_value(2, false)
 	remove_from_group(Global.ENEMY_TAG)
 	add_to_group("hit_enemies")
-	var temp_timer := Timer.new()
-	add_child(temp_timer)
-	temp_timer.wait_time = 0.2
-	temp_timer.one_shot = true
-	temp_timer.start()
-	temp_timer.timeout.connect(restore_hitable)
+	create_timer(restore_hitable, 0.2)
 
 func restore_hitable():
-	print("Enemy hittable")
 	set_collision_layer_value(2, true)
 	add_to_group(Global.ENEMY_TAG)
+	reset_colour.rpc()
+
+func take_damage(damage : float):
+	damage_flash.rpc()
+	health -= damage
+	if health <= 0:
+		queue_free()
+
+@rpc("authority","call_local")
+func damage_flash():
+	var material := mesh.get_surface_override_material(0)
+	material.albedo_color = Color.TOMATO
+
+@rpc("authority","call_local")
+func reset_colour():
+	var material := mesh.get_surface_override_material(0)
+	material.albedo_color = original_colour
+
+func create_timer(function_to_connect, wait_time):
+	var temp_timer := Timer.new()
+	add_child(temp_timer)
+	temp_timer.wait_time = wait_time
+	temp_timer.one_shot = true
+	temp_timer.start()
+	temp_timer.timeout.connect(function_to_connect)
 
 func _exit_tree() -> void:
 	Global.enemy_count -= 1
