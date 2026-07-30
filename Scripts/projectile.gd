@@ -77,7 +77,7 @@ func _ready() -> void:
 		gravity_scale = 0
 	#set_collision_mask_value(2, not proj_data[piercing]) #set enemy collision mask.
 	
-	
+
 func _physics_process(delta: float) -> void:
 	look_update_timer -= delta
 	if look_update_timer <= 0:
@@ -106,7 +106,6 @@ func on_collision(body : Node3D):
 		handle_collision.call_deferred(body)
 		if is_instance_valid(body):
 			body.hit(get_damage())
-
 
 func handle_collision(body : Node3D):
 	proj_data[hits] -= 1

@@ -95,7 +95,6 @@ func set_colour(colour : Color):
 	#print(str(multiplayer.get_unique_id()) + ": colour: "+str(player_colour))
 	var material = hat.get_surface_override_material(0)
 	material.albedo_color = colour
-	
 
 func shoot():
 	var direction := head.transform.basis
@@ -105,4 +104,10 @@ func shoot():
 func on_collision(body : Node3D):
 	if body.is_in_group(Global.ENEMY_TAG):
 		#TODO add player health handling here
-		print(name+": Ouch")
+		print(name + ": Ouch")
+
+@rpc("authority")
+func add_projectile_data(values_to_add):
+	for key in values_to_add:
+		print(str(key) + ": added +" + str(values_to_add[key]))
+		projectile.proj_data[key] += values_to_add[key]

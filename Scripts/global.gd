@@ -25,8 +25,6 @@ const PROJECTILE = preload("uid://dy0vkht00yvfv")
 const PLAYER_MATERIAL = preload("uid://nxsn4asxq8gc")
 
 #TODO: Pause for all players
-#TODO: Upgrades system
-#TODO: UI for upgrades
 #TODO: Kills based XP System
 
 
@@ -114,4 +112,10 @@ func increment_upgrade(player_id):
 	#TODO handle multiplayer upgrade confirmation
 	upgrade_ui.is_open = false
 	upgrade_count += 1
-	print(upgrade_count)
+	#print(upgrade_count)
+
+@rpc("any_peer")
+func apply_upgrade(values_to_add : Dictionary):
+	var players = get_players()
+	for player in players:
+		player.add_projectile_data(values_to_add)

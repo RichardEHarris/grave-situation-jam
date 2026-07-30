@@ -13,9 +13,21 @@ func display(do = true):
 	is_open = do
 	if do:
 		upgrade_menu.show()
+		populate_cards()
 	else:
 		upgrade_menu.hide()
-		
+		clear_cards()
+
+func populate_cards():
+	for i in range(3):
+		var new_card = UPGRADE_CARD.instantiate()
+		new_card.set_values("+1 Damage", "Increases damage by 1", {Projectile.base_damage: 1})
+		upgrade_container.add_child(new_card)
+
+func clear_cards():
+	for child in upgrade_container.get_children():
+		upgrade_container.remove_child(child)
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
