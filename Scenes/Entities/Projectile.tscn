@@ -9,6 +9,9 @@
 material = ExtResource("2_akala")
 size = Vector3(0.5, 1, 1)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_akala"]
+albedo_color = Color(0.78431374, 1, 1, 1)
+
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_mqcfq"]
 properties/0/path = NodePath(".:position")
 properties/0/spawn = true
@@ -16,6 +19,9 @@ properties/0/replication_mode = 1
 properties/1/path = NodePath(".:rotation")
 properties/1/spawn = true
 properties/1/replication_mode = 1
+properties/2/path = NodePath(".:proj_data")
+properties/2/spawn = true
+properties/2/replication_mode = 1
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_c33bx"]
 
@@ -37,6 +43,7 @@ shape = SubResource("CylinderShape3D_akala")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=482060878]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
 mesh = SubResource("PrismMesh_058gr")
+surface_material_override/0 = SubResource("StandardMaterial3D_akala")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=2093201797]
 replication_config = SubResource("SceneReplicationConfig_mqcfq")

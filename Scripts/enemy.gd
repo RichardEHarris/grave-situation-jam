@@ -5,7 +5,7 @@ var min_spawn_dist = 25.0
 var max_spawn_dist = 40.0
 
 var health : float = 2
-
+var iframes : float = 0.1
 var original_colour : Color
 #@onready var enemy_collision: Area3D = $EnemyCollision
 @onready var mesh: MeshInstance3D = $MeshInstance3D
@@ -71,7 +71,7 @@ func hit(damage : float):
 	set_collision_layer_value(2, false)
 	remove_from_group(Global.ENEMY_TAG)
 	add_to_group("hit_enemies")
-	create_timer(restore_hitable, 0.2)
+	create_timer(restore_hitable, iframes)
 
 func restore_hitable():
 	set_collision_layer_value(2, true)

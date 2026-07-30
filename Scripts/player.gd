@@ -27,13 +27,14 @@ func _enter_tree() -> void:
 	if not is_multiplayer_authority():
 		return
 	player_colour = Color(randf(), randf(), randf(), 255)
+	projectile.proj_data[Projectile.colour] = player_colour.lightened(0.5)
+	projectile.proj_data[Projectile.owner_id] = int(name)
 
 func _ready():
 	add_to_group(Global.PLAYER_TAG)
 	hat.set_surface_override_material(0, player_material)
 	#print(str(multiplayer.get_unique_id()) + ": " + str(get_path()))
 	sync.rpc.call_deferred()
-	
 	if not is_multiplayer_authority():
 		set_process(false)
 		set_physics_process(false)
@@ -56,7 +57,7 @@ func _process(_delta: float) -> void:
 		#self.player_colour = Color(randf(), randf(), randf(), 255)
 	if Input.is_action_just_pressed("shoot"):
 		shoot()
-		set_colour.rpc(player_colour)
+		#set_colour.rpc(player_colour)
 		
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -94,6 +95,7 @@ func set_colour(colour : Color):
 	#print(str(multiplayer.get_unique_id()) + ": colour: "+str(player_colour))
 	var material = hat.get_surface_override_material(0)
 	material.albedo_color = colour
+	
 
 func shoot():
 	var direction := head.transform.basis

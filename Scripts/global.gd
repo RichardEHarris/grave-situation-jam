@@ -16,10 +16,14 @@ const PLAYER_TAG = "Players"
 const ENEMY_TAG = "Enemy"
 const PROJECTILE_TAG = "Projectile"
 
-
 const ENEMY = preload("uid://on77vwkf1mvg")
 const PROJECTILE = preload("uid://dy0vkht00yvfv")
 const PLAYER_MATERIAL = preload("uid://nxsn4asxq8gc")
+
+#TODO: Pause for all players
+#TODO: Upgrades system
+#TODO: UI for upgrades
+#TODO: Kills based XP System
 
 
 func _process(delta: float) -> void:
@@ -43,7 +47,7 @@ func spawn_enemy():
 	enemy_count += 1
 	new_enemy.label_text = str(enemy_count)
 	spawn_container.add_child(new_enemy, true)
-	
+
 @rpc("any_peer")
 func shoot_projectile(pos : Vector3, basis : Basis, projectile_data : Dictionary):
 	#print("Attempting to create "+str(projectile_data[Projectile.amount])+" Projectiles")
@@ -51,12 +55,11 @@ func shoot_projectile(pos : Vector3, basis : Basis, projectile_data : Dictionary
 		var spread = deg_to_rad(projectile_data[Projectile.spread_angle])
 		var offset = get_spread_offset_by_count(spread, i)
 		var new_proj : RigidBody3D = PROJECTILE.instantiate()
-		new_proj.set_data(projectile_data)
 		new_proj.position = pos + Vector3(0, 0.5, 0) + (basis * offset)
 		new_proj.set_direction(basis * offset)
 		spawn_container.add_child(new_proj, true)
+		new_proj.set_data(projectile_data)
 		
-	
 
 func find_player(id) -> Node:
 	var players: = get_players()

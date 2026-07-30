@@ -6,6 +6,8 @@ var look_update_interval = 0.05
 var look_update_timer = 0.0
 
 #region Data titles
+const owner_id = "owner_id"
+const colour = "colour"
 const speed = "speed"
 const base_damage = "base_damage"
 const size = "size"
@@ -22,6 +24,8 @@ const homing = "homing"
 const homing_distance = "homing_distance"
 #endregion
 @export var proj_data = {
+	owner_id : 1,
+	colour: null,
 	speed : 25,
 	base_damage : 1.0,
 	size : 1.0,
@@ -47,22 +51,28 @@ enum movement_type{
 @onready var timer: Timer = $Timer
 @onready var physics_shape: CollisionShape3D = $PhysicsShape
 @onready var hitbox: CollisionShape3D = $ProjectileCollision/Hitbox
+@onready var mesh: MeshInstance3D = $MeshInstance3D
 
 func set_data(new_data : Dictionary) -> void:
 	proj_data = new_data
-	
+	apply_colour.rpc.call_deferred()
+
+func _enter_tree() -> void:
+	pass
 
 func _ready() -> void:
 	add_to_group(Global.PROJECTILE_TAG)
 	if not is_multiplayer_authority():
 		set_process(false)
 		set_physics_process(false)
-		
 		return
 	projectile_collision.body_entered.connect(on_collision)
 	timer.wait_time = proj_data[lifespan]
 	timer.timeout.connect(timeout)
 	timer.start()
+	var old_material = mesh.get_surface_override_material(0)
+	mesh.set_surface_override_material(0, old_material.duplicate())
+	
 	if not proj_data[gravity]:
 		gravity_scale = 0
 	#set_collision_mask_value(2, not proj_data[piercing]) #set enemy collision mask.
@@ -129,7 +139,6 @@ func get_capsule_shape(radius : float = 0.5, height :float = 2.0) -> CapsuleShap
 	shape.height = height
 	return shape
 
-
 func smooth_look_at(target_position: Vector3, rotation_speed : float, delta: float) -> void:
 	if global_position.is_equal_approx(target_position):
 		return
@@ -144,6 +153,15 @@ func smooth_look_at(target_position: Vector3, rotation_speed : float, delta: flo
 	var target_quaternion = target_transform.basis.get_rotation_quaternion()
 	var next_quaternion = current_quaternion.slerp(target_quaternion, rotation_speed * delta)
 	set_direction(Basis(next_quaternion) * Vector3.FORWARD)
+
+func set_colour(new_colour : Color):
+	proj_data[colour] = new_colour
+
+@rpc("authority", "call_local")
+func apply_colour():
+	if proj_data[colour] != null:
+		var material := mesh.get_surface_override_material(0)
+		material.albedo_color = proj_data[colour]
 
 func get_damage() -> float:
 	return proj_data[base_damage]
