@@ -30,7 +30,7 @@ const homing_distance = "homing_distance"
 	base_damage : 1.0,
 	size : 1.0,
 	lifespan : 3.0,
-	hits : 20,
+	hits : 1,
 	amount : 1,
 	spread_angle : 10,
 	piercing : false,
@@ -108,23 +108,22 @@ func on_collision(body : Node3D):
 			body.hit(get_damage())
 
 func handle_collision(body : Node3D):
+	if not proj_data[piercing] and not proj_data[chain]:
+		set_direction(direction.bounce((body.global_position - position).normalized()))
+		look_forward()
+	if proj_data[split] > 0:
+		var split_projectile_data = proj_data.duplicate_deep()
+		split_projectile_data[amount] = proj_data[split]
+		split_projectile_data[split] = 0
+		split_projectile_data[spread_angle] = proj_data[split_angle]
+		Global.shoot_projectile(global_position, transform.basis.rotated(Vector3.UP, deg_to_rad(split_projectile_data[spread_angle])), split_projectile_data)
+	if proj_data[chain]:
+		var closest := Global.find_closest_in(global_position, Global.ENEMY_TAG, INF, 1)
+		#print("Hit: " + str(body.label_text) + ", Moving towards: " + str(closest.label_text))
+		set_direction((closest.global_position - global_position).normalized())
 	proj_data[hits] -= 1
 	if proj_data[hits] <= 0:
 		queue_free()
-	else:
-		if not proj_data[piercing] and not proj_data[chain]:
-			set_direction(direction.bounce((body.global_position - position).normalized()))
-			look_forward()
-		if proj_data[split] > 0:
-			var split_projectile_data = proj_data.duplicate_deep()
-			split_projectile_data[amount] = proj_data[split]
-			split_projectile_data[split] = 0
-			split_projectile_data[spread_angle] = proj_data[split_angle]
-			Global.shoot_projectile(global_position, transform.basis.rotated(Vector3.UP, deg_to_rad(split_projectile_data[spread_angle])), split_projectile_data)
-		if proj_data[chain]:
-			var closest := Global.find_closest_in(global_position, Global.ENEMY_TAG, INF, 1)
-			#print("Hit: " + str(body.label_text) + ", Moving towards: " + str(closest.label_text))
-			set_direction((closest.global_position - global_position).normalized())
 
 func set_direction(new_dir : Vector3):
 	direction = Vector3(new_dir.x, 0, new_dir.z).normalized()

@@ -21,13 +21,10 @@ func display(do = true):
 func populate_cards():
 	for i in range(3):
 		var new_card = UPGRADE_CARD.instantiate()
-		new_card.set_values("+1 Damage", "Increases damage by 1", {Projectile.base_damage: 1})
+		var values = UpgradeList.get_random()
+		new_card.set_values(values[0],values[1],values[2])
 		upgrade_container.add_child(new_card)
 
 func clear_cards():
 	for child in upgrade_container.get_children():
 		upgrade_container.remove_child(child)
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass

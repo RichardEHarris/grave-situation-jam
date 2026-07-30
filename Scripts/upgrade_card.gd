@@ -16,10 +16,6 @@ func _ready() -> void:
 	descripton.append_text(description_text)
 	
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-
 func set_values(new_title : String, new_description : String, values : Dictionary):
 	title_text = new_title
 	description_text = new_description

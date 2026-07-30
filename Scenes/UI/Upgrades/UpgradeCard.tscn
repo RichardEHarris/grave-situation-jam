@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cxt3858tu3t34"]
 
-[ext_resource type="Script" uid="uid://0u2pnn3pn0mq" path="res://Scenes/UI/Upgrades/upgrade_card.gd" id="1_uypx8"]
+[ext_resource type="Script" uid="uid://0u2pnn3pn0mq" path="res://Scripts/upgrade_card.gd" id="1_uypx8"]
 
 [node name="UpgradeCard" type="PanelContainer" unique_id=1451243022]
 anchors_preset = 8
@@ -24,21 +24,25 @@ theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1245980479]
+custom_minimum_size = Vector2(100, 150)
 layout_mode = 2
 
 [node name="Title" type="RichTextLabel" parent="MarginContainer/VBoxContainer" unique_id=597595432]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 bbcode_enabled = true
-text = "[font_size=18][b]+2 Projectiles[/b][/font_size]"
+text = "+2 Projectiles"
 fit_content = true
 autowrap_mode = 0
+horizontal_alignment = 1
 
 [node name="Descripton" type="RichTextLabel" parent="MarginContainer/VBoxContainer" unique_id=927305103]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 bbcode_enabled = true
-text = "[font_size=14]Add 2 extra projectiles to your attack[/font_size]"
+text = "Add 2 extra projectiles to your attack"
 fit_content = true
 
 [node name="ButtonSelect" type="Button" parent="MarginContainer/VBoxContainer" unique_id=248217105]

@@ -109,5 +109,10 @@ func on_collision(body : Node3D):
 @rpc("authority")
 func add_projectile_data(values_to_add):
 	for key in values_to_add:
-		print(str(key) + ": added +" + str(values_to_add[key]))
-		projectile.proj_data[key] += values_to_add[key]
+		#print(str(key) + ": added +" + str(values_to_add[key]))
+		var value = values_to_add[key]
+		if value is bool:
+			projectile.proj_data[key] = value
+		else:
+			projectile.proj_data[key] += value
+		
