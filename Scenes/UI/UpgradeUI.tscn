@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://drys5enukcalw"]
+
+[ext_resource type="PackedScene" uid="uid://cxt3858tu3t34" path="res://Scenes/UI/Upgrades/UpgradeCard.tscn" id="1_eo83s"]
+[ext_resource type="Script" uid="uid://by1wdfcdxgtam" path="res://Scenes/UI/upgrade_ui.gd" id="1_lgyan"]
+
+[node name="UpgradeUi" type="CanvasLayer" unique_id=1119643366]
+script = ExtResource("1_lgyan")
+
+[node name="UpgradeMenu" type="Control" parent="." unique_id=1529827312]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="UpgradeMenu" unique_id=1643631052]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="UpgradeContainer" type="HBoxContainer" parent="UpgradeMenu/MarginContainer" unique_id=746097250]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="UpgradeCard" parent="UpgradeMenu/MarginContainer/UpgradeContainer" unique_id=1451243022 instance=ExtResource("1_eo83s")]
+layout_mode = 2
+
+[node name="UpgradeCard2" parent="UpgradeMenu/MarginContainer/UpgradeContainer" unique_id=29393022 instance=ExtResource("1_eo83s")]
+layout_mode = 2
+
+[node name="UpgradeCard3" parent="UpgradeMenu/MarginContainer/UpgradeContainer" unique_id=1640231648 instance=ExtResource("1_eo83s")]
+layout_mode = 2

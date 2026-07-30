@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://5al0o8asrmrm" path="res://Scenes/UI/MainMenu.tscn" id="1_r150o"]
 [ext_resource type="Shader" uid="uid://dt5ajmg3lg67n" path="res://Scenes/outline.gdshader" id="2_idj7w"]
 [ext_resource type="PackedScene" uid="uid://bxjifqpfnc6le" path="res://Scenes/UI/PlayerUI.tscn" id="3_kln2b"]
+[ext_resource type="PackedScene" uid="uid://drys5enukcalw" path="res://Scenes/UI/UpgradeUI.tscn" id="4_rgh2o"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_kln2b"]
 render_priority = 0
@@ -51,3 +52,5 @@ extra_cull_margin = 16384.0
 mesh = SubResource("QuadMesh_idj7w")
 
 [node name="PlayerUI" parent="." unique_id=59860313 instance=ExtResource("3_kln2b")]
+
+[node name="UpgradeUi" parent="." unique_id=1119643366 instance=ExtResource("4_rgh2o")]

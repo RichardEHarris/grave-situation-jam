@@ -3,11 +3,15 @@ extends Node
 var world : Node3D
 var spawn_container : Node3D
 var player_ui : CanvasLayer
-var player_menu: Control
+var player_menu : Control
+var upgrade_ui : CanvasLayer
+var upgrade_menu : Control
 
 var spawn_enemies : bool = false
 var spawn_cooldown = 0.2
 var current_timer = 0
+var upgrade_count : int = 0
+var upgrade_interval : int = 10
 @export var enemy_count : int = 0
 @export var max_enemies : int = 100
 @export var kills : int = 0
@@ -37,6 +41,12 @@ func _process(delta: float) -> void:
 		current_timer = spawn_cooldown
 	player_ui.display()
 	player_ui.set_kills.rpc(kills)
+	
+	if not upgrade_ui.is_open and (kills / upgrade_interval > upgrade_count):
+		print("Upgrade menu opened")
+		upgrade_ui.is_open = true
+		show_upgrades.rpc()
+		
 	
 
 func spawn_enemy():
@@ -94,3 +104,14 @@ func find_closest_in(origin_pos : Vector3, tag : String, max_distance : float = 
 				shortest_distance_squared = distance_squared
 				closest_tagged = tagged
 	return closest_tagged
+
+@rpc("authority", "call_remote")
+func show_upgrades():
+	upgrade_ui.display(true)
+
+@rpc("any_peer")
+func increment_upgrade(player_id):
+	#TODO handle multiplayer upgrade confirmation
+	upgrade_ui.is_open = false
+	upgrade_count += 1
+	print(upgrade_count)
