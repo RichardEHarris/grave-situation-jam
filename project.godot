@@ -23,6 +23,7 @@ PacketHandshake="*uid://tt3j25a05n7c"
 Network="*uid://dn6dsj5dagu4y"
 TileRunInstancesGlobal="*uid://b6fg6pu2bfi14"
 Global="*uid://b4hf3htnpfnwf"
+UpgradeList="*uid://wvg6odb353fi"
 
 [display]
 

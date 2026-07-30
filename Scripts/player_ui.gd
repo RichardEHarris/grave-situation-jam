@@ -18,5 +18,5 @@ func display(do = true):
 		hud.hide()
 
 @rpc("call_local")
-func set_kills(kills : int):
-	kill_number.text = str(kills)
+func set_kills(kills : int, upgrade_interval : int):
+	kill_number.text = str(kills) +"/" + str(upgrade_interval)

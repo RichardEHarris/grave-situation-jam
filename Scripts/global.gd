@@ -11,6 +11,7 @@ var spawn_enemies : bool = false
 var spawn_cooldown = 0.2
 var current_timer = 0
 var upgrade_count : int = 0
+var upgrade_max : int = 0
 var upgrade_interval : int = 10
 @export var enemy_count : int = 0
 @export var max_enemies : int = 100
@@ -38,9 +39,13 @@ func _process(delta: float) -> void:
 		spawn_enemy()
 		current_timer = spawn_cooldown
 	player_ui.display()
-	player_ui.set_kills.rpc(kills)
+	player_ui.set_kills.rpc(kills, upgrade_interval)
+
+	if kills >= upgrade_interval:
+		upgrade_max += 1
+		upgrade_interval = int(upgrade_interval * 1.5) + 10
 	
-	if not upgrade_ui.is_open and (kills / upgrade_interval > upgrade_count):
+	if not upgrade_ui.is_open and upgrade_count < upgrade_max:
 		print("Upgrade menu opened")
 		upgrade_ui.is_open = true
 		show_upgrades.rpc()
