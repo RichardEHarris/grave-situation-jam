@@ -12,6 +12,7 @@ const upgrades = [
 	["Piercing", "Projectiles pierce through enemies.", {Projectile.piercing: true, Projectile.hits: 1}],
 	["+5 Speed", "Increases projectile speed by 5.", {Projectile.speed: 5}],
 	["+1 Size", "Increases projectile size by 1.", {Projectile.size: 1}],
+	["+1 Attack Speed", "Increases attack speed by ~50%.", {Projectile.attack_speed: 1}],
 	#["+1 Lifespan", "Increases projectile lifespan by 1 second.", {Projectile.lifespan: 1}],
 	#["+5 Spread Angle", "Increases projectile spread angle by 5 degrees.", {Projectile.spread_angle: 5}],
 	#["+10 Homing Distance", "Increases homing distance by 10 units.", {Projectile.homing_distance: 10}]

@@ -2,7 +2,7 @@ extends RigidBody3D
 class_name Projectile
 
 var direction : Vector3
-var look_update_interval = 0.05
+var look_update_interval = 0.1
 var look_update_timer = 0.0
 
 #region Data titles
@@ -22,13 +22,14 @@ const split_angle = "split_angle"
 const chain = "chain"
 const homing = "homing"
 const homing_distance = "homing_distance"
+const attack_speed = "attack_speed"
 #endregion
 @export var proj_data = {
 	owner_id : 1,
 	colour: null,
 	speed : 25,
 	base_damage : 1.0,
-	size : 1.0,
+	size : 0.0,
 	lifespan : 3.0,
 	hits : 1,
 	amount : 1,
@@ -39,26 +40,37 @@ const homing_distance = "homing_distance"
 	split_angle: 45,
 	chain: false,
 	homing : 0,
-	homing_distance : 50
-}
-#TODO damage
-enum movement_type{
-	straight,
-	wiggle
+	homing_distance : 50,
+	attack_speed : 1,
 }
 
 @onready var projectile_collision: Area3D = $ProjectileCollision
 @onready var timer: Timer = $Timer
-@onready var physics_shape: CollisionShape3D = $PhysicsShape
+#@onready var physics_shape: CollisionShape3D = $PhysicsShape
 @onready var hitbox: CollisionShape3D = $ProjectileCollision/Hitbox
 @onready var mesh: MeshInstance3D = $MeshInstance3D
 
 func set_data(new_data : Dictionary) -> void:
+	look_forward()
 	proj_data = new_data
 	apply_colour.rpc.call_deferred()
+	apply_data.rpc(new_data)
+	if not is_multiplayer_authority():
+		return
+	set_process(true)
+	set_physics_process(true)
+
+@rpc("authority", "call_local")
+func apply_data(data : Dictionary):
+	var proj_size = (data[size]/5) + 0.5
+	hitbox.shape = get_capsule_shape(proj_size)
+	mesh.transform = mesh.transform.scaled(Vector3.ONE * (proj_size + 0.5))
+	if not proj_data[gravity]:
+		gravity_scale = 0
 
 func _enter_tree() -> void:
-	pass
+	set_process(false)
+	set_physics_process(false)
 
 func _ready() -> void:
 	add_to_group(Global.PROJECTILE_TAG)
@@ -72,9 +84,6 @@ func _ready() -> void:
 	timer.start()
 	var old_material = mesh.get_surface_override_material(0)
 	mesh.set_surface_override_material(0, old_material.duplicate())
-	
-	if not proj_data[gravity]:
-		gravity_scale = 0
 	#set_collision_mask_value(2, not proj_data[piercing]) #set enemy collision mask.
 	
 
@@ -85,7 +94,7 @@ func _physics_process(delta: float) -> void:
 			var closest = Global.find_closest_in(global_position, Global.ENEMY_TAG, proj_data[homing_distance])
 			if closest != null:
 				smooth_look_at(closest.global_position, proj_data[homing]*40, delta)
-		look_forward()
+				#look_forward()
 		look_update_timer = look_update_interval
 	
 
@@ -121,6 +130,7 @@ func handle_collision(body : Node3D):
 		var closest := Global.find_closest_in(global_position, Global.ENEMY_TAG, INF, 1)
 		#print("Hit: " + str(body.label_text) + ", Moving towards: " + str(closest.label_text))
 		set_direction((closest.global_position - global_position).normalized())
+		look_forward()
 	proj_data[hits] -= 1
 	if proj_data[hits] <= 0:
 		queue_free()

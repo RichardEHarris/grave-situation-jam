@@ -25,9 +25,6 @@ const ENEMY = preload("uid://on77vwkf1mvg")
 const PROJECTILE = preload("uid://dy0vkht00yvfv")
 const PLAYER_MATERIAL = preload("uid://nxsn4asxq8gc")
 
-#TODO: Pause for all players
-#TODO: Kills based XP System
-
 
 func _process(delta: float) -> void:
 	if multiplayer.multiplayer_peer and not is_multiplayer_authority():

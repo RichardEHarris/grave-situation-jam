@@ -2,8 +2,9 @@ extends CharacterBody3D
 
 @export var player_colour : Color
 @export var angle_offset = -15.0
+var attack_interval : float = 0.5
+var attack_cooldown = 0
 const SPEED = 5.0
-const JUMP_VELOCITY = 4.5
 var player_material : StandardMaterial3D 
 
 @onready var camera_3d: Camera3D = %Camera3D
@@ -47,7 +48,8 @@ func _ready():
 	player_collision.body_entered.connect(on_collision)
 	
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+	attack_cooldown += delta
 	if Input.is_action_just_pressed('menu'):
 		if Global.player_menu.visible == false:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
@@ -55,8 +57,11 @@ func _process(_delta: float) -> void:
 		else:
 			Global.player_menu.hide()
 		#self.player_colour = Color(randf(), randf(), randf(), 255)
-	if Input.is_action_just_pressed("shoot"):
-		shoot()
+	if Input.is_action_pressed("shoot"):
+		if attack_cooldown >= attack_interval:
+			shoot()
+			attack_interval = get_attack_interval()
+			attack_cooldown = 0
 		#set_colour.rpc(player_colour)
 		
 
@@ -115,4 +120,6 @@ func add_projectile_data(values_to_add):
 			projectile.proj_data[key] = value
 		else:
 			projectile.proj_data[key] += value
-		
+
+func get_attack_interval() -> float:
+	return 0.5/projectile.proj_data[Projectile.attack_speed]

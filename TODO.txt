@@ -1,0 +1,7 @@
+TODO:
+	Pause For all players when selecting upgrades
+	waves getting stronger
+	better ui information
+	Player health
+	fix up projectile rpc calls and movement calculations
+	upgrades rarity and criteria/remove once picked.
