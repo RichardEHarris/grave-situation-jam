@@ -5,6 +5,7 @@
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_iyl1i"]
 
 [node name="PlayerUI" type="CanvasLayer" unique_id=59860313]
+process_mode = 3
 script = ExtResource("1_iyl1i")
 
 [node name="Menu" type="Control" parent="." unique_id=802149250]

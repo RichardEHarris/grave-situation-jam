@@ -14,7 +14,6 @@ func _ready() -> void:
 	title.append_text(title_text)
 	descripton.clear()
 	descripton.append_text(description_text)
-	
 
 func set_values(new_title : String, new_description : String, values : Dictionary):
 	title_text = new_title
@@ -23,5 +22,5 @@ func set_values(new_title : String, new_description : String, values : Dictionar
 
 func select():
 	Global.upgrade_ui.display(false)
-	Global.increment_upgrade.rpc_id(1, get_multiplayer_authority())
+	Global.increment_upgrade.rpc_id(1)
 	Global.apply_upgrade(values_to_add)

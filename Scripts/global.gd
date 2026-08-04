@@ -10,7 +10,7 @@ var upgrade_menu : Control
 var spawn_enemies : bool = false
 var spawn_cooldown = 0.2
 var current_timer = 0
-var upgrade_count : int = 0
+var player_upgrade_count : Dictionary = {}
 var upgrade_max : int = 0
 var upgrade_interval : int = 10
 @export var enemy_count : int = 0
@@ -25,6 +25,8 @@ const ENEMY = preload("uid://on77vwkf1mvg")
 const PROJECTILE = preload("uid://dy0vkht00yvfv")
 const PLAYER_MATERIAL = preload("uid://nxsn4asxq8gc")
 
+func _ready():
+	process_mode = Node.PROCESS_MODE_ALWAYS
 
 func _process(delta: float) -> void:
 	if multiplayer.multiplayer_peer and not is_multiplayer_authority():
@@ -41,13 +43,17 @@ func _process(delta: float) -> void:
 	if kills >= upgrade_interval:
 		upgrade_max += 1
 		upgrade_interval = int(upgrade_interval * 1.5) + 10
-	
-	if not upgrade_ui.is_open and upgrade_count < upgrade_max:
+	if not upgrade_ui.is_open and get_lowest_upgrade_count() < upgrade_max:
 		print("Upgrade menu opened")
 		upgrade_ui.is_open = true
+		populate_upgrade_count()
 		show_upgrades.rpc()
+		pause.rpc()
+	elif upgrade_ui.is_open and get_lowest_upgrade_count() == upgrade_max:
+		print("Upgrade menu closed for all clients")
+		upgrade_ui.is_open = false
+		unpause.rpc()
 		
-	
 
 func spawn_enemy():
 	if enemy_count >= max_enemies:
@@ -108,16 +114,53 @@ func find_closest_in(origin_pos : Vector3, tag : String, max_distance : float = 
 @rpc("authority", "call_remote")
 func show_upgrades():
 	upgrade_ui.display(true)
+	
+
+@rpc("any_peer", "call_local")
+func pause():
+	get_tree().paused = true
+
+@rpc("any_peer","call_local")
+func unpause():
+	get_tree().paused = false
 
 @rpc("any_peer")
-func increment_upgrade(player_id):
+func increment_upgrade():
 	#TODO handle multiplayer upgrade confirmation
-	upgrade_ui.is_open = false
-	upgrade_count += 1
-	#print(upgrade_count)
+	add_upgrade_count(multiplayer.get_remote_sender_id())
 
 @rpc("any_peer")
 func apply_upgrade(values_to_add : Dictionary):
 	var players = get_players()
 	for player in players:
 		player.add_projectile_data(values_to_add)
+
+@rpc("authority")
+func get_upgrade_count(player_id : int) -> int:
+	if player_upgrade_count.has(str(player_id)):
+		return player_upgrade_count[str(player_id)]
+	else:
+		player_upgrade_count[str(player_id)] = 0
+		return 0
+
+@rpc("authority")
+func add_upgrade_count(player_id : int):
+	player_upgrade_count[str(player_id)] += 1
+	print(player_id, " : added 1 to upgrade count, Total: ", player_upgrade_count[str(player_id)] )
+
+#TODO handle player leaving or orphaned id
+@rpc("authority")
+func get_lowest_upgrade_count() -> int:
+	if player_upgrade_count.size() == 0:
+		return 0
+	var lowest = INF
+	for player in player_upgrade_count:
+		var count = player_upgrade_count[player]
+		if count < lowest:
+			lowest = count
+	#print("From: ", player_upgrade_count.values(), " the lowest is: ", lowest)
+	return lowest
+
+func populate_upgrade_count():
+	for player in get_players():
+		get_upgrade_count(int(player.name))

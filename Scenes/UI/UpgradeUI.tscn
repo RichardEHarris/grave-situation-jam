@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://by1wdfcdxgtam" path="res://Scripts/upgrade_ui.gd" id="1_lgyan"]
 
 [node name="UpgradeUi" type="CanvasLayer" unique_id=1119643366]
+process_mode = 3
 script = ExtResource("1_lgyan")
 
 [node name="UpgradeMenu" type="Control" parent="." unique_id=1529827312]
