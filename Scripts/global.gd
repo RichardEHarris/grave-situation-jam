@@ -31,38 +31,48 @@ func _ready():
 func _process(delta: float) -> void:
 	if multiplayer.multiplayer_peer and not is_multiplayer_authority():
 		return
-	current_timer -= delta
-	if get_players().size() > 0:
-		spawn_enemies = true
-	if spawn_enemies and current_timer <= 0:
-		spawn_enemy()
-		current_timer = spawn_cooldown
-	player_ui.display()
-	player_ui.set_kills.rpc(kills, upgrade_interval)
+	if not get_tree().paused:
+		current_timer -= delta
+		if get_players().size() > 0:
+			spawn_enemies = true
+		if spawn_enemies and current_timer <= 0:
+			spawn_enemy()
+			current_timer = spawn_cooldown
+		player_ui.display()
+		player_ui.set_kills.rpc(kills, upgrade_interval)
 
-	if kills >= upgrade_interval:
-		upgrade_max += 1
-		upgrade_interval = int(upgrade_interval * 1.5) + 10
-	if not upgrade_ui.is_open and get_lowest_upgrade_count() < upgrade_max:
-		print("Upgrade menu opened")
-		upgrade_ui.is_open = true
-		populate_upgrade_count()
-		show_upgrades.rpc()
-		pause.rpc()
-	elif upgrade_ui.is_open and get_lowest_upgrade_count() == upgrade_max:
-		print("Upgrade menu closed for all clients")
-		upgrade_ui.is_open = false
-		unpause.rpc()
+		if kills >= upgrade_interval:
+			upgrade_max += 1
+			upgrade_interval = int(upgrade_interval * 1.5) + 10
+	
+	if not upgrade_ui.is_open:
+		if get_lowest_upgrade_count() < upgrade_max:
+			#print("Upgrade menu opened")
+			upgrade_ui.is_open = true
+			populate_upgrade_count()
+			show_upgrades.rpc()
+			pause.rpc()
+	else:
+		if get_lowest_upgrade_count() == upgrade_max:
+			#print("Upgrade menu closed for all clients")
+			upgrade_ui.is_open = false
+			unpause.rpc()
 		
 
 func spawn_enemy():
 	if enemy_count >= max_enemies:
 		return
-	var new_enemy := ENEMY.instantiate()
-	#new_enemy.position = Vector3(randf_range(5, 10), 0.1, randf_range(5, 10))
+	var enemy_data := WaveList.get_random()
+	var new_enemy = create_enemy(enemy_data[0],enemy_data[1],enemy_data[2],enemy_data[3])
 	enemy_count += 1
 	new_enemy.label_text = str(enemy_count)
 	spawn_container.add_child(new_enemy, true)
+
+func create_enemy(move_speed, health, colour, size) -> Node:
+	var new_enemy := ENEMY.instantiate()
+	#new_enemy.position = Vector3(randf_range(5, 10), 0.1, randf_range(5, 10))
+	new_enemy.set_data(move_speed, health, colour, size)
+	return new_enemy
 
 @rpc("any_peer")
 func shoot_projectile(pos : Vector3, basis : Basis, projectile_data : Dictionary):
@@ -126,7 +136,6 @@ func unpause():
 
 @rpc("any_peer")
 func increment_upgrade():
-	#TODO handle multiplayer upgrade confirmation
 	add_upgrade_count(multiplayer.get_remote_sender_id())
 
 @rpc("any_peer")
@@ -146,7 +155,7 @@ func get_upgrade_count(player_id : int) -> int:
 @rpc("authority")
 func add_upgrade_count(player_id : int):
 	player_upgrade_count[str(player_id)] += 1
-	print(player_id, " : added 1 to upgrade count, Total: ", player_upgrade_count[str(player_id)] )
+	#print(player_id, " : added 1 to upgrade count, Total: ", player_upgrade_count[str(player_id)] )
 
 #TODO handle player leaving or orphaned id
 @rpc("authority")

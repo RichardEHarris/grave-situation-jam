@@ -41,7 +41,7 @@ const attack_speed = "attack_speed"
 	chain: false,
 	homing : 0,
 	homing_distance : 50,
-	attack_speed : 1,
+	attack_speed : 0.0,
 }
 
 @onready var projectile_collision: Area3D = $ProjectileCollision

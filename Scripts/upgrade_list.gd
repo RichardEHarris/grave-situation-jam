@@ -2,6 +2,7 @@ extends Node
 
 #attributes: speed, base_damage, size, lifespan, hits, amount, spread_angle, piercing,
 # gravity, split, split_angle, chain, homing, homing_distance
+##(title, description, data to add)
 const upgrades = [
 	["+1 Damage", "Increases damage by 1.", {Projectile.base_damage: 1}],
 	["+2 Projectiles", "Increases projectile amount by 2.", {Projectile.amount: 2}],

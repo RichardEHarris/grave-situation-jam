@@ -1,4 +1,5 @@
 TODO:
+	enemy spawning
 	waves getting stronger
 	enemies not getting lost in the void (despawn if too far awy from player)
 	better ui information

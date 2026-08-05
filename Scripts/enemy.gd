@@ -1,6 +1,6 @@
 extends CharacterBody3D
 
-const SPEED = 2.0
+var move_speed = 2.0
 var min_spawn_dist = 25.0
 var max_spawn_dist = 40.0
 
@@ -55,11 +55,11 @@ func _physics_process(_delta: float) -> void:
 		var look := position.direction_to(closest.position)
 		var direction := look
 		if direction:
-			velocity.x = direction.x * SPEED
-			velocity.z = direction.z * SPEED
+			velocity.x = direction.x * move_speed
+			velocity.z = direction.z * move_speed
 		else:
-			velocity.x = move_toward(velocity.x, 0, SPEED)
-			velocity.z = move_toward(velocity.z, 0, SPEED)
+			velocity.x = move_toward(velocity.x, 0, move_speed)
+			velocity.z = move_toward(velocity.z, 0, move_speed)
 	else:
 		velocity.x = 0
 		velocity.z = 0
@@ -101,6 +101,23 @@ func create_timer(function_to_connect, wait_time):
 	temp_timer.one_shot = true
 	temp_timer.start()
 	temp_timer.timeout.connect(function_to_connect)
+
+func set_data(movement_speed : float, health_points : float, colour : Color, size : float):
+	move_speed = movement_speed
+	health = health_points
+	original_colour = colour
+	set_size(size)
+	set_colour.rpc.call_deferred(colour)
+	
+
+@rpc("any_peer", "call_local")
+func set_colour(colour : Color):
+	var material := mesh.get_surface_override_material(0)
+	material.albedo_color = colour
+	original_colour = colour
+
+func set_size(size):
+	transform = transform.scaled(Vector3.ONE * size)
 
 func _exit_tree() -> void:
 	Global.enemy_count -= 1
