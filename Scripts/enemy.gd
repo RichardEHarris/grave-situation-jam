@@ -2,7 +2,8 @@ extends CharacterBody3D
 
 var move_speed = 2.0
 var min_spawn_dist = 25.0
-var max_spawn_dist = 40.0
+var max_spawn_dist = 30.0
+var despawn_dist = 30.0
 
 var health : float = 2
 var iframes : float = 0.1
@@ -14,9 +15,8 @@ var original_colour : Color
 
 func _enter_tree() -> void:
 	#print("Initial: " + str(position))
-	var random_direction = Vector3(randf_range(-1,1),0,randf_range(-1,1)).normalized()
-	var spawn_location = random_direction * randf_range(min_spawn_dist, max_spawn_dist)
-	position = position + spawn_location
+	
+	place_near_position(Global.get_players().pick_random().position)
 	#print("position: " + str(position))
 
 func _ready() -> void:
@@ -43,15 +43,11 @@ func _process(_delta: float) -> void:
 func _physics_process(_delta: float) -> void:
 	if is_queued_for_deletion():
 		return
-	var players = Global.get_players()
-	var closest = null
-	var closest_dist = 1000
-	for player in players:
-		var dist = position.distance_to(player.position)
-		if dist < closest_dist:
-			closest = player
-			closest_dist = dist
+	var closest = get_closest_player()
 	if closest:
+		var dist = position.distance_to(closest.position)
+		if dist > despawn_dist:
+			place_near_position(closest.position)
 		var look := position.direction_to(closest.position)
 		var direction := look
 		if direction:
@@ -65,6 +61,17 @@ func _physics_process(_delta: float) -> void:
 		velocity.z = 0
 
 	move_and_slide()
+
+func get_closest_player() -> Node:
+	var players = Global.get_players()
+	var closest : Node = null
+	var closest_dist = 1000
+	for player in players:
+		var dist = position.distance_to(player.position)
+		if dist < closest_dist:
+			closest = player
+			closest_dist = dist
+	return closest
 
 func hit(damage : float):
 	take_damage(damage)
@@ -109,6 +116,10 @@ func set_data(movement_speed : float, health_points : float, colour : Color, siz
 	set_size(size)
 	set_colour.rpc.call_deferred(colour)
 	
+func place_near_position(pos: Vector3):
+	var random_direction = Vector3(randf_range(-1,1),0,randf_range(-1,1)).normalized()
+	var spawn_location = random_direction * randf_range(min_spawn_dist, max_spawn_dist)
+	position = pos + spawn_location
 
 @rpc("any_peer", "call_local")
 func set_colour(colour : Color):

@@ -1,12 +1,10 @@
 TODO:
-	enemy spawning
-	waves getting stronger
-	enemies not getting lost in the void (despawn if too far awy from player)
+	More Waves and enemy balancing
 	better ui information
 	Player health
 	fix up projectile rpc calls and movement calculations
 	upgrades rarity and criteria/remove once picked.
 	Input ip to join multiplayer
 	noray multiplayer tunneling
-	fix projectile colour jank
+	fix projectile colour jank (Seperate materials per player)
 	

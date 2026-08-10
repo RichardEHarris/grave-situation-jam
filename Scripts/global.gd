@@ -8,8 +8,9 @@ var upgrade_ui : CanvasLayer
 var upgrade_menu : Control
 
 var spawn_enemies : bool = false
-var spawn_cooldown = 0.2
+var spawn_cooldown = 0
 var current_timer = 0
+var global_time = 0
 var player_upgrade_count : Dictionary = {}
 var upgrade_max : int = 0
 var upgrade_interval : int = 10
@@ -29,6 +30,7 @@ func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
 
 func _process(delta: float) -> void:
+	global_time += delta
 	if multiplayer.multiplayer_peer and not is_multiplayer_authority():
 		return
 	if not get_tree().paused:
@@ -60,15 +62,20 @@ func _process(delta: float) -> void:
 		
 
 func spawn_enemy():
+	var wave_data : Array = WaveList.get_wave(global_time)
+	max_enemies = wave_data[0]
 	if enemy_count >= max_enemies:
 		return
-	var enemy_data := WaveList.get_random()
+	var enemy_types : Array = wave_data[1]
+	var enemy_spawn_chance : Array = wave_data[2]
+	
+	var enemy_data = WaveList.get_enemy(enemy_types[WaveList.get_random_index(enemy_spawn_chance)])
 	var new_enemy = create_enemy(enemy_data[0],enemy_data[1],enemy_data[2],enemy_data[3])
 	enemy_count += 1
 	new_enemy.label_text = str(enemy_count)
 	spawn_container.add_child(new_enemy, true)
 
-func create_enemy(move_speed, health, colour, size) -> Node:
+func create_enemy(health, size, move_speed, colour) -> Node:
 	var new_enemy := ENEMY.instantiate()
 	#new_enemy.position = Vector3(randf_range(5, 10), 0.1, randf_range(5, 10))
 	new_enemy.set_data(move_speed, health, colour, size)
