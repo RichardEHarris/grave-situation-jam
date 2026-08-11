@@ -8,6 +8,7 @@ var despawn_dist = 30.0
 var health : float = 2
 var iframes : float = 0.1
 var original_colour : Color
+var exp_bounty : float = 1
 #@onready var enemy_collision: Area3D = $EnemyCollision
 @onready var mesh: MeshInstance3D = $MeshInstance3D
 @onready var label_3d: Label3D = $Label3D
@@ -109,13 +110,14 @@ func create_timer(function_to_connect, wait_time):
 	temp_timer.start()
 	temp_timer.timeout.connect(function_to_connect)
 
-func set_data(movement_speed : float, health_points : float, colour : Color, size : float):
+func set_data(movement_speed : float, health_points : float, colour : Color, size : float, experience : float):
 	move_speed = movement_speed
 	health = health_points
 	original_colour = colour
+	exp_bounty = experience
 	set_size(size)
 	set_colour.rpc.call_deferred(colour)
-	
+
 func place_near_position(pos: Vector3):
 	var random_direction = Vector3(randf_range(-1,1),0,randf_range(-1,1)).normalized()
 	var spawn_location = random_direction * randf_range(min_spawn_dist, max_spawn_dist)
@@ -133,3 +135,4 @@ func set_size(size):
 func _exit_tree() -> void:
 	Global.enemy_count -= 1
 	Global.kills += 1
+	Global.experience += exp_bounty

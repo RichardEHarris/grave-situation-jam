@@ -4,6 +4,8 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_iyl1i"]
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_an405"]
+
 [node name="PlayerUI" type="CanvasLayer" unique_id=59860313]
 process_mode = 3
 script = ExtResource("1_iyl1i")
@@ -42,7 +44,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="HUD" unique_id=112090318]
+[node name="TopRight" type="PanelContainer" parent="HUD" unique_id=112090318]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -52,21 +54,47 @@ offset_bottom = 23.0
 grow_horizontal = 0
 theme_override_styles/panel = SubResource("StyleBoxEmpty_iyl1i")
 
-[node name="MarginContainer" type="MarginContainer" parent="HUD/PanelContainer" unique_id=431272328]
+[node name="MarginContainer" type="MarginContainer" parent="HUD/TopRight" unique_id=431272328]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HUD/PanelContainer/MarginContainer" unique_id=704125631]
+[node name="HBoxContainer" type="HBoxContainer" parent="HUD/TopRight/MarginContainer" unique_id=704125631]
 layout_mode = 2
 
-[node name="KillLabel" type="Label" parent="HUD/PanelContainer/MarginContainer/HBoxContainer" unique_id=454946437]
+[node name="KillLabel" type="Label" parent="HUD/TopRight/MarginContainer/HBoxContainer" unique_id=454946437]
 layout_mode = 2
 text = "Kills:"
 
-[node name="KillNumber" type="Label" parent="HUD/PanelContainer/MarginContainer/HBoxContainer" unique_id=101978963]
+[node name="KillNumber" type="Label" parent="HUD/TopRight/MarginContainer/HBoxContainer" unique_id=101978963]
 unique_name_in_owner = true
 layout_mode = 2
 text = "0"
+
+[node name="TopMiddle" type="PanelContainer" parent="HUD" unique_id=129841325]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -35.0
+offset_right = 35.0
+offset_bottom = 43.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_an405")
+
+[node name="MarginContainer" type="MarginContainer" parent="HUD/TopMiddle" unique_id=379172527]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HUD/TopMiddle/MarginContainer" unique_id=615382294]
+layout_mode = 2
+
+[node name="ExpBar" type="ProgressBar" parent="HUD/TopMiddle/MarginContainer/HBoxContainer" unique_id=597558780]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 20)
+layout_mode = 2

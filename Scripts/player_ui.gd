@@ -4,6 +4,7 @@ extends CanvasLayer
 @onready var menu: Control = %Menu
 @onready var button_leave: Button = %ButtonLeave
 @onready var kill_number: Label = %KillNumber
+@onready var exp_bar: ProgressBar = %ExpBar
 
 func _ready() -> void:
 	menu.hide()
@@ -18,5 +19,6 @@ func display(do = true):
 		hud.hide()
 
 @rpc("call_local")
-func set_kills(kills : int, upgrade_interval : int):
-	kill_number.text = str(kills) +"/" + str(upgrade_interval)
+func set_hud(kills : int, experience : float, upgrade_interval : int, previous_interval : int):
+	kill_number.text = str(kills)
+	exp_bar.value = ((experience - previous_interval) / (upgrade_interval - previous_interval)) * 100

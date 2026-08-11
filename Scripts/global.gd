@@ -14,9 +14,11 @@ var global_time = 0
 var player_upgrade_count : Dictionary = {}
 var upgrade_max : int = 0
 var upgrade_interval : int = 10
+var previous_interval : int = 0
 @export var enemy_count : int = 0
 @export var max_enemies : int = 100
 @export var kills : int = 0
+var experience : float = 0
 
 const PLAYER_TAG = "Players"
 const ENEMY_TAG = "Enemy"
@@ -41,10 +43,11 @@ func _process(delta: float) -> void:
 			spawn_enemy()
 			current_timer = spawn_cooldown
 		player_ui.display()
-		player_ui.set_kills.rpc(kills, upgrade_interval)
+		player_ui.set_hud.rpc(kills, experience, upgrade_interval, previous_interval)
 
-		if kills >= upgrade_interval:
+		if experience >= upgrade_interval:
 			upgrade_max += 1
+			previous_interval = upgrade_interval
 			upgrade_interval = int(upgrade_interval * 1.5) + 10
 	
 	if not upgrade_ui.is_open:
@@ -70,15 +73,15 @@ func spawn_enemy():
 	var enemy_spawn_chance : Array = wave_data[2]
 	
 	var enemy_data = WaveList.get_enemy(enemy_types[WaveList.get_random_index(enemy_spawn_chance)])
-	var new_enemy = create_enemy(enemy_data[0],enemy_data[1],enemy_data[2],enemy_data[3])
+	var new_enemy = create_enemy(enemy_data[0] ,enemy_data[1] ,enemy_data[2] ,enemy_data[3], enemy_data[4])
 	enemy_count += 1
 	new_enemy.label_text = str(enemy_count)
 	spawn_container.add_child(new_enemy, true)
 
-func create_enemy(health, size, move_speed, colour) -> Node:
+func create_enemy(health, size, move_speed, colour, exp_bounty) -> Node:
 	var new_enemy := ENEMY.instantiate()
 	#new_enemy.position = Vector3(randf_range(5, 10), 0.1, randf_range(5, 10))
-	new_enemy.set_data(move_speed, health, colour, size)
+	new_enemy.set_data(move_speed, health, colour, size, exp_bounty)
 	return new_enemy
 
 @rpc("any_peer")
