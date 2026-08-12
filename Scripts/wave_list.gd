@@ -5,14 +5,20 @@ const WAVE_INTERVAL = 60.0
 ##(health, size, move_speed, colour, exp)
 const ENEMY_LIST := {
 	"default" : [2, 1, 2, Color(0.118, 0.078, 0.0, 1.0), 1],
-	"large"   : [5, 2, 1, Color(0.361, 0.396, 0.239, 1.0), 5]
+	"large"   : [5, 2, 1, Color(0.361, 0.396, 0.239, 1.0), 5],
+	"small"   : [1, 0.5, 3, Color(0.342, 0.161, 0.013, 1.0), 1],
+	"juggernaut" : [50, 5, 0.75, Color(0.012, 0.036, 0.0, 1.0), 10],
+	"strong" : [10, 1.5, 2, Color(0.091, 0.086, 0.036, 1.0), 5],
 	}
 
 ##(max_enemies, enemy_types : Array, ratio : Array)
 const WAVE_LIST = [
 	[30, ["default"], [1.0]],
 	[100, ["default"], [1.0]],
-	[50, ["default","large"], [0.9, 0.1]]
+	[50, ["default","large"], [0.9, 0.1]],
+	[35, ["small", "juggernaut"], [0.8, 0.2]],
+	[10, ["juggernaut"], [1.0]],
+	[500, ["strong"], [1.0]],
 	]
 ##(max_enemies, enemy_types, ratio)
 func get_wave(time : float) ->Array:

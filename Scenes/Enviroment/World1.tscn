@@ -50,7 +50,7 @@ mesh = SubResource("PlaneMesh_uuwhu")
 environment = SubResource("Environment_uuwhu")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1311210268]
-transform = Transform3D(1, 0, 0, 0, 0.62185884, 0.78312945, 0, -0.78312945, 0.62185884, 0, 3.4527621, 0)
+transform = Transform3D(0.9659258, 0.16636567, -0.1982669, 0, 0.76604444, 0.6427876, 0.25881904, -0.62088513, 0.7399421, 0, 3.4527621, 0)
 shadow_enabled = true
 
 [node name="SpawnContainer" type="Node3D" parent="." unique_id=187880534]

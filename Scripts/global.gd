@@ -32,18 +32,20 @@ func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
 
 func _process(delta: float) -> void:
-	global_time += delta
+	
 	if multiplayer.multiplayer_peer and not is_multiplayer_authority():
 		return
 	if not get_tree().paused:
-		current_timer -= delta
+		
 		if get_players().size() > 0:
 			spawn_enemies = true
+			current_timer -= delta
+			global_time += delta
 		if spawn_enemies and current_timer <= 0:
 			spawn_enemy()
 			current_timer = spawn_cooldown
 		player_ui.display()
-		player_ui.set_hud.rpc(kills, experience, upgrade_interval, previous_interval)
+		player_ui.set_hud.rpc(kills, experience, upgrade_interval, previous_interval, global_time)
 
 		if experience >= upgrade_interval:
 			upgrade_max += 1

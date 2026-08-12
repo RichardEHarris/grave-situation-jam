@@ -64,6 +64,12 @@ theme_override_constants/margin_bottom = 10
 [node name="HBoxContainer" type="HBoxContainer" parent="HUD/TopRight/MarginContainer" unique_id=704125631]
 layout_mode = 2
 
+[node name="Timer" type="Label" parent="HUD/TopRight/MarginContainer/HBoxContainer" unique_id=1855961953]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Time"
+
 [node name="KillLabel" type="Label" parent="HUD/TopRight/MarginContainer/HBoxContainer" unique_id=454946437]
 layout_mode = 2
 text = "Kills:"
@@ -91,10 +97,11 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HUD/TopMiddle/MarginContainer" unique_id=615382294]
-layout_mode = 2
-
-[node name="ExpBar" type="ProgressBar" parent="HUD/TopMiddle/MarginContainer/HBoxContainer" unique_id=597558780]
+[node name="ExpBar" type="ProgressBar" parent="HUD/TopMiddle/MarginContainer" unique_id=597558780]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(300, 20)
 layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HUD/TopMiddle/MarginContainer" unique_id=615382294]
+layout_mode = 2
+alignment = 2
