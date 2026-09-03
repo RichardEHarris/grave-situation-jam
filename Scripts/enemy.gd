@@ -5,26 +5,34 @@ var min_spawn_dist = 25.0
 var max_spawn_dist = 30.0
 var despawn_dist = 30.0
 
+var damage : float = 1
 var health : float = 2
-var iframes : float = 0.1
-var original_colour : Color
+var iframes : float = 0.05
+@export var original_colour : Color
 var exp_bounty : float = 1
-#@onready var enemy_collision: Area3D = $EnemyCollision
+var enemy_size : float = 1
+@onready var collision: CollisionShape3D = $CollisionShape3D
 @onready var mesh: MeshInstance3D = $MeshInstance3D
 @onready var label_3d: Label3D = $Label3D
 @export var label_text: String
 
+
 func _enter_tree() -> void:
 	#print("Initial: " + str(position))
-	
-	place_near_position(Global.get_players().pick_random().position)
+	var players := Global.get_players()
+	if players:
+		place_near_position(players.pick_random().position)
 	#print("position: " + str(position))
 
 func _ready() -> void:
 	add_to_group(Global.ENEMY_TAG)
 	var material = mesh.get_surface_override_material(0)
 	mesh.set_surface_override_material(0, material.duplicate())
+	if original_colour != null:
+		material = mesh.get_surface_override_material(0)
+		material.albedo_color = original_colour
 	original_colour = material.albedo_color
+	set_size(enemy_size)
 	if not is_multiplayer_authority():
 		#set_process(false)
 		set_physics_process(false)
@@ -115,7 +123,7 @@ func set_data(movement_speed : float, health_points : float, colour : Color, siz
 	health = health_points
 	original_colour = colour
 	exp_bounty = experience
-	set_size(size)
+	enemy_size = size
 	set_colour.rpc.call_deferred(colour)
 
 func place_near_position(pos: Vector3):
@@ -131,6 +139,13 @@ func set_colour(colour : Color):
 
 func set_size(size):
 	transform = transform.scaled(Vector3.ONE * size)
+	#collision.shape = get_new_cylinder(2.0 * size, 0.5 * size)
+
+func get_new_cylinder(height : float, radius : float) -> CylinderShape3D:
+	var shape = CylinderShape3D.new()
+	shape.height = height
+	shape.radius = radius
+	return shape
 
 func _exit_tree() -> void:
 	Global.enemy_count -= 1

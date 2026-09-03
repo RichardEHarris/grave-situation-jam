@@ -22,6 +22,9 @@ properties/2/replication_mode = 1
 properties/3/path = NodePath(".:scale")
 properties/3/spawn = true
 properties/3/replication_mode = 1
+properties/4/path = NodePath(".:original_colour")
+properties/4/spawn = true
+properties/4/replication_mode = 1
 
 [node name="Enemy" type="CharacterBody3D" unique_id=869953371]
 collision_layer = 2

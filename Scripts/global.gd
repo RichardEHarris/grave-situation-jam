@@ -13,7 +13,7 @@ var current_timer = 0
 var global_time = 0
 var player_upgrade_count : Dictionary = {}
 var upgrade_max : int = 0
-var upgrade_interval : int = 10
+var upgrade_interval : int = 5
 var previous_interval : int = 0
 @export var enemy_count : int = 0
 @export var max_enemies : int = 100
@@ -96,7 +96,7 @@ func shoot_projectile(pos : Vector3, basis : Basis, projectile_data : Dictionary
 		new_proj.position = pos + Vector3(0, 0.5, 0) + (basis * offset)
 		new_proj.set_direction(basis * offset)
 		spawn_container.add_child(new_proj, true)
-		new_proj.set_data(projectile_data)
+		new_proj.set_data(projectile_data.duplicate())
 		
 
 func find_player(id) -> Node:
